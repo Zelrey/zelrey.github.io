@@ -1,0 +1,253 @@
+/* =========================================================
+   Zelrey — Portfolio · Home (hero + expertise)
+   ========================================================= */
+
+#page-home {
+  padding: 0;
+}
+
+#page-home.active {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ----- Hero ----- */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: calc(var(--nav-h) + 24px) 40px 40px;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hero-bg img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* always fill; never show side gaps */
+  object-position: center center;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+.hero-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 5, 5, 0.35) 0%,
+    transparent 30%,
+    transparent 58%,
+    rgba(5, 5, 5, 0.88) 100%
+  );
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 40px;
+  width: 100%;
+}
+
+.hero-copy {
+  max-width: 900px;
+}
+
+.hero-title {
+  font-size: clamp(1.6rem, 3.75vw, 2.875rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.055em;
+  margin-bottom: 22px;
+}
+
+.hero-title span {
+  display: block;
+  color: rgba(255, 255, 255, 0.48);
+  font-weight: 500;
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 20px;
+}
+
+.hero-bio {
+  font-size: 14.5px;
+  font-weight: 450;
+  letter-spacing: -0.03em;
+  color: rgba(255, 255, 255, 0.72);
+  max-width: 340px;
+  line-height: 1.5;
+}
+
+.hero-bio strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.hero-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+  margin-top: clamp(1.68rem, 3.94vw, 3.02rem);
+}
+
+.cta-title {
+  font-size: clamp(1.6rem, 3.75vw, 2.875rem);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.055em;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.48);
+}
+
+.tag {
+  padding: 8px 14px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* ----- Expertise & Capabilities ----- */
+.home-next {
+  position: relative;
+  z-index: 2;
+  padding: 100px 24px 60px;
+  background: var(--bg);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.home-next-inner {
+  width: 100%;
+  margin: 0;
+  padding-bottom: 60px;
+}
+
+.home-skills-head {
+  margin-bottom: 54px;
+}
+
+.home-skills-intro {
+  font-size: clamp(1.6rem, 3.25vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.05em;
+  color: #fff;
+  margin-top: 8px;
+}
+
+.home-skills-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.skill-card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.012);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  padding: 40px;
+  transition: transform 0.35s var(--ease), background 0.3s ease;
+}
+
+.skill-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.024);
+}
+
+.skill-index {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  margin-bottom: 24px;
+}
+
+.skill-card h3 {
+  font-size: 1.45rem;
+  font-weight: 650;
+  letter-spacing: -0.045em;
+  margin: 0 0 12px;
+  color: #fff;
+}
+
+.skill-card p {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.68);
+  margin: 0;
+}
+
+/* ----- Home responsive ----- */
+@media (max-width: 1024px) {
+  }
+
+@media (max-width: 768px) {
+  .hero {
+    padding: calc(var(--nav-h) + 16px) 20px 28px;
+    min-height: 100svh;
+  }
+
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .hero-title {
+    font-size: clamp(1.35rem, 6vw, 1.75rem);
+  }
+
+  .cta-title {
+    width: 100%;
+    text-align: left;
+    font-size: clamp(1.35rem, 6vw, 1.75rem);
+  }
+
+  .hero-cta {
+    width: 100%;
+    align-items: center;
+    margin-top: 0;
+  }
+
+  .hero-cta .btn-solid {
+    width: 100%;
+  }
+
+  .home-next {
+    padding: 60px 20px 48px;
+  }
+
+  .home-skills-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .skill-card {
+    padding: 28px 24px;
+  }
+}

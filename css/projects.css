@@ -1,0 +1,232 @@
+/* =========================================================
+   Zelrey — Portfolio · Projects (white theme, editorial grid)
+   ========================================================= */
+
+#page-projects {
+  background: #ffffff;
+  color: #0a0a0a;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+/* Light topbar when Projects is active */
+body.theme-light .topbar .glass-pill,
+body.theme-light .topbar .status {
+  background: rgba(0, 0, 0, 0.045);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  color: #0a0a0a;
+}
+
+body.theme-light .topbar .nav-link,
+body.theme-light .topbar .btn-contact {
+  color: #0a0a0a;
+}
+
+body.theme-light .topbar .nav-link:hover,
+body.theme-light .topbar .btn-contact:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+body.theme-light .nav-toggle span,
+body.theme-light .nav-toggle span::before,
+body.theme-light .nav-toggle span::after {
+  background: #0a0a0a;
+}
+
+.projects-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 48px;
+  padding: 0 4px;
+}
+
+.projects-toolbar .section-label {
+  color: #71717a;
+}
+
+.projects-toolbar .section-title {
+  color: #0a0a0a;
+}
+
+/* View switcher (2 / 3 / 4 columns) */
+.view-options {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #f4f4f6;
+  padding: 4px;
+  border-radius: 12px;
+  border: 1px solid #e4e4e9;
+}
+
+.view-btn {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  color: #8e8e98;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease, transform 0.2s var(--ease);
+}
+
+.view-btn:hover {
+  color: #0a0a0a;
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.view-btn.active {
+  color: #0a0a0a;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+/* Project group */
+.project-group {
+  margin-bottom: 32px;
+}
+
+.project-group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.project-group-title {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #55555e;
+  margin: 0;
+}
+
+.project-group-title strong {
+  color: #111111;
+  font-weight: 650;
+}
+
+.plus-icon {
+  display: inline-block;
+  margin-left: 6px;
+  font-weight: 400;
+  color: #9999a1;
+}
+
+/* Grid + column views (default 2) — 75% gap reduction */
+.project-group-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  transition: gap 0.35s ease;
+}
+
+.project-group.view-cols-2 .project-group-grid {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+.project-group.view-cols-3 .project-group-grid {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.project-group.view-cols-4 .project-group-grid {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+
+/* Card */
+.project-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.project-thumb {
+  position: relative;
+  overflow: hidden;
+  background: #f0f0f2;
+  aspect-ratio: 16 / 10;
+  cursor: pointer;
+  transition: transform 0.35s var(--ease);
+}
+
+.project-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s var(--ease);
+}
+
+.project-thumb:hover {
+  transform: translateY(-2px);
+}
+
+.project-thumb:hover img {
+  transform: scale(1.02);
+}
+
+/* Blank placeholder */
+.blank-thumb {
+  background: #f0f0f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.blank-thumb:hover {
+  background: #e8e8eb;
+}
+
+.blank-indicator {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #a0a0a8;
+}
+
+/* Footer override */
+#page-projects .site-footer {
+  border-top: 1px solid #eaeaea;
+  color: #52525b;
+}
+
+#page-projects .site-footer a {
+  color: #0a0a0a;
+}
+
+#page-projects .site-footer a:hover {
+  color: #52525b;
+}
+
+/* ----- Projects responsive ----- */
+@media (max-width: 1024px) {
+  .project-group.view-cols-4 .project-group-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .projects-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .view-options {
+    align-self: stretch;
+    justify-content: center;
+  }
+
+  .project-group-grid,
+  .project-group.view-cols-2 .project-group-grid,
+  .project-group.view-cols-3 .project-group-grid,
+  .project-group.view-cols-4 .project-group-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}

@@ -112,6 +112,8 @@ button {
 
 /* ----- Buttons ----- */
 .btn-solid {
+  transform-origin: 50% 0;
+  will-change: transform;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -137,6 +139,8 @@ button {
 }
 
 .btn-ghost {
+  transform-origin: 50% 0;
+  will-change: transform;
   padding: 12px 18px;
   border-radius: var(--radius-pill);
   font-size: 13.5px;

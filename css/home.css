@@ -20,7 +20,7 @@
   flex-direction: column;
   justify-content: flex-end;
   padding: calc(var(--nav-h) + 24px) 40px 40px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .hero-bg {
@@ -105,11 +105,11 @@
 }
 
 .hero-cta {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 14px;
-  margin-top: clamp(1.68rem, 3.94vw, 3.02rem);
+  gap: 16px;
 }
 
 .cta-title {
@@ -119,103 +119,51 @@
   letter-spacing: -0.055em;
   margin: 0;
   color: rgba(255, 255, 255, 0.48);
+  text-align: right;
 }
 
-.tag {
-  padding: 8px 14px;
-  font-size: 11.5px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.75);
-}
-
-/* ----- Expertise & Capabilities ----- */
-.home-next {
+/* Button anchor footprint exactly matches the capsule */
+.liquid-metal-host {
   position: relative;
-  z-index: 2;
-  padding: 100px 24px 60px;
-  background: var(--bg);
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  width: 146px;
+  height: 52px;
+  cursor: pointer;
+  z-index: 10;
+  overflow: visible;
 }
 
-.home-next-inner {
-  width: 100%;
-  margin: 0;
-  padding-bottom: 60px;
+/* Frame is centered directly over the 146x52px button footprint:
+   The physical button outline aligns with Zelrey, while the glow spreads out freely in all directions */
+.liquid-metal-frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 280px;
+  height: 180px;
+  border: 0;
+  background: transparent;
+  pointer-events: auto;
+  overflow: visible;
 }
 
-.home-skills-head {
-  margin-bottom: 54px;
-}
 
-.home-skills-intro {
-  font-size: clamp(1.6rem, 3.25vw, 2.5rem);
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.05em;
-  color: #fff;
-  margin-top: 8px;
-}
-
-.home-skills-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-}
-
-.skill-card {
-  position: relative;
-  border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.012);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  padding: 40px;
-  transition: transform 0.35s var(--ease), background 0.3s ease;
-}
-
-.skill-card:hover {
-  transform: translateY(-4px);
-  background: rgba(255, 255, 255, 0.024);
-}
-
-.skill-index {
-  display: block;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  color: var(--text-dim);
-  margin-bottom: 24px;
-}
-
-.skill-card h3 {
-  font-size: 1.45rem;
-  font-weight: 650;
-  letter-spacing: -0.045em;
-  margin: 0 0 12px;
-  color: #fff;
-}
-
-.skill-card p {
-  font-size: 14.5px;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.68);
-  margin: 0;
-}
 
 /* ----- Home responsive ----- */
 @media (max-width: 1024px) {
-  }
+  
+}
 
 @media (max-width: 768px) {
   .hero {
-    padding: calc(var(--nav-h) + 16px) 20px 28px;
-    min-height: 100svh;
+    padding: calc(var(--nav-h) + 20px) 20px 32px;
+    min-height: auto;
+    padding-top: calc(var(--nav-h) + 40px);
   }
 
   .hero-content {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 32px;
   }
 
   .hero-title {
@@ -230,24 +178,66 @@
 
   .hero-cta {
     width: 100%;
-    align-items: center;
+    align-items: flex-start;
     margin-top: 0;
   }
 
-  .hero-cta .btn-solid {
-    width: 100%;
-  }
+  
 
-  .home-next {
-    padding: 60px 20px 48px;
-  }
+  
+}
 
-  .home-skills-grid {
+/* ----- Services Grid (2 columns, no numbers, borderless clean cards) ----- */
+.home-services {
+  position: relative;
+  z-index: 2;
+  padding: 80px 40px 60px;
+  background: var(--bg);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.home-services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  max-width: 100%;
+}
+
+.service-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  padding: 36px 32px;
+  position: relative;
+  transition: transform 0.35s var(--ease), border-color 0.3s ease, background 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.service-card h3 {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin: 0 0 14px;
+  color: #ffffff;
+}
+
+.service-card p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .home-services {
+    padding: 48px 20px;
+  }
+  .home-services-grid {
     grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .skill-card {
-    padding: 28px 24px;
+    gap: 16px;
   }
 }

@@ -75,4 +75,53 @@
       io.observe(el);
     });
   }
+
+  /* ----- Art Masonry tight auto-rows (guaranteed 0 gap on top) ----- */
+  function resizeArtItems() {
+    const grid = document.querySelector(".art-masonry");
+    if (!grid) return;
+    const colWidth = (grid.clientWidth - 21) / 4;
+    if (colWidth <= 10) return;
+
+    const rowHeight = 2;
+    const gap = 7;
+    const items = grid.querySelectorAll(".art-item");
+
+    items.forEach((item) => {
+      let h = 0;
+      if (item.classList.contains("art-item-span2")) {
+        // Video spans 2 columns + 1 gap
+        const span2Width = colWidth * 2 + gap;
+        h = span2Width; // 1:1 square
+      } else {
+        const img = item.querySelector("img");
+        if (img) {
+          if (img.naturalWidth && img.naturalHeight) {
+            h = (colWidth * img.naturalHeight) / img.naturalWidth;
+          } else if (img.getAttribute("width") && img.getAttribute("height")) {
+            const w = parseFloat(img.getAttribute("width"));
+            const ah = parseFloat(img.getAttribute("height"));
+            h = (colWidth * ah) / w;
+          } else {
+            h = img.getBoundingClientRect().height || colWidth;
+          }
+        }
+      }
+
+      if (h > 0) {
+        const rowSpan = Math.round((h + gap) / rowHeight);
+        item.style.gridRowEnd = "span " + rowSpan;
+      }
+    });
+  }
+
+  window.addEventListener("load", resizeArtItems);
+  window.addEventListener("resize", resizeArtItems);
+  document.addEventListener("DOMContentLoaded", resizeArtItems);
+  document.querySelectorAll(".art-item img, .art-item video").forEach((el) => {
+    el.addEventListener("load", resizeArtItems);
+    el.addEventListener("loadedmetadata", resizeArtItems);
+  });
+  [50, 150, 400, 1000].forEach((t) => setTimeout(resizeArtItems, t));
+
 })();

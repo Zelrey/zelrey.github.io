@@ -2,20 +2,21 @@ import { defineType, defineField } from 'sanity'
 
 export const artworkType = defineType({
   name: 'artwork',
-  title: 'Artwork',
+  title: 'Artworks',
   type: 'document',
   fields: [
     defineField({
       name: 'title',
-      title: 'Artwork Title',
+      title: 'Title / Caption',
       type: 'string',
       validation: (rule) => rule.required(),
+      description: 'Name of the artwork (e.g. Surreal Logos, Wings, Girl with Oranges)',
     }),
     defineField({
       name: 'order',
       title: 'Display Order / Priority',
       type: 'number',
-      description: 'Used for ordering artworks in the gallery (1, 2, 3...)',
+      description: 'Lower numbers appear first (1, 2, 3...)',
       initialValue: 1,
     }),
     defineField({
@@ -24,8 +25,8 @@ export const artworkType = defineType({
       type: 'string',
       options: {
         list: [
-          { title: 'Image', value: 'image' },
-          { title: 'Video (MP4)', value: 'video' },
+          { title: 'Image Artwork', value: 'image' },
+          { title: 'Looping Video (MP4)', value: 'video' },
         ],
         layout: 'radio',
       },
@@ -33,7 +34,7 @@ export const artworkType = defineType({
     }),
     defineField({
       name: 'image',
-      title: 'Artwork Image',
+      title: 'Upload Image',
       type: 'image',
       options: {
         hotspot: true,
@@ -42,7 +43,7 @@ export const artworkType = defineType({
     }),
     defineField({
       name: 'videoFile',
-      title: 'Video File (MP4)',
+      title: 'Upload MP4 Video',
       type: 'file',
       options: {
         accept: 'video/mp4',
@@ -51,15 +52,15 @@ export const artworkType = defineType({
     }),
     defineField({
       name: 'spanTwoColumns',
-      title: 'Feature Tile (Span 2 Columns in Art)',
+      title: 'Feature Tile (Span 2 Columns in Gallery)',
       type: 'boolean',
-      description: 'Check this if this artwork or video should occupy 2 columns',
+      description: 'Turn this ON if you want this piece to occupy 2 columns',
       initialValue: false,
     }),
   ],
   orderings: [
     {
-      title: 'Manual Order',
+      title: 'Display Order (1, 2, 3...)',
       name: 'orderAsc',
       by: [{ field: 'order', direction: 'asc' }],
     },
@@ -73,7 +74,7 @@ export const artworkType = defineType({
     prepare({ title, media, mediaType }) {
       return {
         title: title || 'Untitled Artwork',
-        subtitle: mediaType === 'video' ? '🎬 Looping Video' : '🖼️ Image Artwork',
+        subtitle: mediaType === 'video' ? '🎬 Looping Video' : '🖼️ Image',
         media: media,
       }
     },

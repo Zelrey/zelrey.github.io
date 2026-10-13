@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex" />
+  <title>Zelrey — Portfolio Studio</title>
+  <link rel="icon" href="../images/avatar.webp" type="image/webp" />
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #0f1015;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    #sanity {
+      height: 100%;
+    }
+    .loading-screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #ecece8;
+      background: #0e0f13;
+      gap: 16px;
+    }
+    .loading-spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(255, 255, 255, 0.15);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+
+  <!-- React & React-DOM (production UMD) -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Styled-components -->
+  <script src="https://unpkg.com/styled-components@6.1.13/dist/styled-components.min.js"></script>
+  <!-- Sanity Studio Standalone Bundle -->
+  <script src="https://unpkg.com/sanity@3/dist/index.browser.js"></script>
+</head>
+<body>
+  <div id="sanity">
+    <div class="loading-screen" id="loader">
+      <div class="loading-spinner"></div>
+      <p style="font-size: 14px; letter-spacing: 0.04em;">Loading Zelrey Portfolio Studio...</p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const { defineConfig, renderStudio, defineType, defineField } = window.Sanity || {};
+      if (!renderStudio) {
+        // Fallback redirection to Sanity manage if UMD bundle differs
+        return;
+      }
+
+      const artworkType = defineType({
+        name: 'artwork',
+        title: 'Artworks',
+        type: 'document',
+        fields: [
+          defineField({ name: 'title', title: 'Artwork Title', type: 'string', validation: (Rule) => Rule.required() }),
+          defineField({ name: 'order', title: 'Display Order / Priority', type: 'number', initialValue: 1 }),
+          defineField({
+            name: 'mediaType',
+            title: 'Media Type',
+            type: 'string',
+            options: {
+              list: [
+                { title: 'Image Artwork', value: 'image' },
+                { title: 'Looping Video (MP4)', value: 'video' },
+              ],
+              layout: 'radio',
+            },
+            initialValue: 'image',
+          }),
+          defineField({ name: 'image', title: 'Upload Artwork Image', type: 'image', options: { hotspot: true } }),
+          defineField({ name: 'videoFile', title: 'Upload MP4 Video', type: 'file', options: { accept: 'video/mp4' } }),
+          defineField({ name: 'spanTwoColumns', title: 'Feature Tile (Span 2 Columns in Art)', type: 'boolean', initialValue: false }),
+        ],
+      });
+
+      const projectType = defineType({
+        name: 'project',
+        title: 'Projects',
+        type: 'document',
+        fields: [
+          defineField({ name: 'title', title: 'Project Title (e.g. JPARK SUITES)', type: 'string', validation: (Rule) => Rule.required() }),
+          defineField({ name: 'discipline', title: 'Discipline / Category', type: 'string', validation: (Rule) => Rule.required() }),
+          defineField({ name: 'year', title: 'Year (e.g. 2026)', type: 'string', initialValue: '2026' }),
+          defineField({ name: 'order', title: 'Display Order', type: 'number', initialValue: 1 }),
+          defineField({
+            name: 'images',
+            title: 'Project Gallery Images (Drag & Drop to reorder)',
+            type: 'array',
+            of: [{ type: 'image', options: { hotspot: true } }],
+          }),
+        ],
+      });
+
+      const config = defineConfig({
+        name: 'default',
+        title: 'Zelrey Portfolio Studio',
+        projectId: 'nczz4q4p',
+        dataset: 'production',
+        basePath: '/studio',
+        schema: {
+          types: [artworkType, projectType],
+        },
+      });
+
+      renderStudio(document.getElementById('sanity'), config);
+      const loader = document.getElementById('loader');
+      if (loader) loader.style.display = 'none';
+    })();
+  </script>
+</body>
+</html>

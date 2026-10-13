@@ -60,7 +60,7 @@
   z-index: 2;
   display: grid;
   grid-template-columns: 1fr auto;
-  align-items: start;
+  align-items: end;
   gap: 40px;
   width: 100%;
 }
@@ -109,6 +109,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  justify-content: flex-end;
   gap: 16px;
 }
 
@@ -125,6 +126,7 @@
 /* Button anchor footprint exactly matches the capsule */
 .liquid-metal-host {
   position: relative;
+  bottom: 20px;
   width: 146px;
   height: 52px;
   cursor: pointer;

@@ -11,44 +11,18 @@
   const navCenter = document.querySelector(".nav-center");
   const navToggle = document.querySelector(".nav-toggle");
 
-  let isSwitching = false;
-
-  function showPage(id, isInitial = false) {
+  function showPage(id) {
     const target = id || "home";
-    const currentPage = document.querySelector(".page.active");
     const nextPage = document.getElementById(`page-${target}`);
+    if (!nextPage) return;
 
-    if (currentPage && currentPage.id === `page-${target}`) return;
-    if (isSwitching) return;
+    pages.forEach((p) => {
+      p.classList.remove("active");
+    });
+    nextPage.classList.add("active");
+    window.scrollTo({ top: 0, behavior: "auto" });
 
-    if (isInitial || !currentPage) {
-      pages.forEach((p) => {
-        p.classList.remove("active", "is-visible", "is-leaving");
-      });
-      if (nextPage) {
-        nextPage.classList.add("active");
-        requestAnimationFrame(() => nextPage.classList.add("is-visible"));
-      }
-      applyNavAndTheme(target);
-      return;
-    }
-
-    isSwitching = true;
-    currentPage.classList.add("is-leaving");
-
-    setTimeout(() => {
-      currentPage.classList.remove("active", "is-visible", "is-leaving");
-      if (nextPage) {
-        nextPage.classList.add("active");
-        window.scrollTo({ top: 0, behavior: "auto" });
-        requestAnimationFrame(() => {
-          nextPage.classList.add("is-visible");
-        });
-      }
-
-      applyNavAndTheme(target);
-      isSwitching = false;
-    }, 180);
+    applyNavAndTheme(target);
   }
 
   function applyNavAndTheme(target) {
@@ -81,7 +55,7 @@
   });
 
   const initial = (location.hash || "#home").replace("#", "") || "home";
-  showPage(PAGES.includes(initial) ? initial : "home", true);
+  showPage(PAGES.includes(initial) ? initial : "home");
 
   window.addEventListener("hashchange", () => {
     const h = (location.hash || "#home").replace("#", "");
@@ -185,7 +159,7 @@
       const now = new Date();
       // Format to Asia/Manila (Cebu) 24-hour time HH:MM:SS
       const timeStr = now.toLocaleTimeString("en-GB", {
-        timeZone: "Asia/Manila",
+        timeZone: "Asia/Singapore",
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
@@ -227,7 +201,7 @@
       const now = new Date();
       // Format to Asia/Manila (Cebu) 24-hour time HH:MM:SS
       const timeStr = now.toLocaleTimeString("en-GB", {
-        timeZone: "Asia/Manila",
+        timeZone: "Asia/Singapore",
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",

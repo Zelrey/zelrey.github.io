@@ -5,14 +5,37 @@
 (function () {
   "use strict";
 
-  /* ----- Lightbox ----- */
+  /* ----- Lightbox with Image & Video Zoom Support ----- */
   const lightbox = document.getElementById("lightbox");
-  const lightboxImg = lightbox ? lightbox.querySelector("img") : null;
+  const lightboxImg = document.getElementById("lightbox-img");
+  const lightboxVideo = document.getElementById("lightbox-video");
+  const lightboxTitle = document.getElementById("lightbox-title");
+  const lightboxDesc = document.getElementById("lightbox-desc");
+  const lightboxClose = document.getElementById("lightbox-close");
 
-  function openLightbox(src, alt) {
-    if (!lightbox || !lightboxImg) return;
-    lightboxImg.src = src;
-    lightboxImg.alt = alt || "";
+  function openLightbox(mediaSrc, isVideo, title, desc) {
+    if (!lightbox) return;
+
+    if (isVideo && lightboxVideo) {
+      if (lightboxImg) lightboxImg.style.display = "none";
+      const source = lightboxVideo.querySelector("source");
+      if (source) source.src = mediaSrc;
+      lightboxVideo.src = mediaSrc;
+      lightboxVideo.style.display = "block";
+      lightboxVideo.play().catch(() => {});
+    } else if (lightboxImg) {
+      if (lightboxVideo) {
+        lightboxVideo.pause();
+        lightboxVideo.style.display = "none";
+      }
+      lightboxImg.src = mediaSrc;
+      lightboxImg.alt = title || "Artwork";
+      lightboxImg.style.display = "block";
+    }
+
+    if (lightboxTitle) lightboxTitle.textContent = title || "";
+    if (lightboxDesc) lightboxDesc.textContent = desc || "";
+
     lightbox.classList.add("open");
     document.body.style.overflow = "hidden";
   }
@@ -21,17 +44,36 @@
     if (!lightbox) return;
     lightbox.classList.remove("open");
     document.body.style.overflow = "";
+    if (lightboxVideo) {
+      lightboxVideo.pause();
+    }
   }
 
   document.querySelectorAll("[data-lightbox]").forEach((el) => {
-    el.addEventListener("click", () => {
-      const img = el.querySelector("img") || el;
-      openLightbox(img.currentSrc || img.src, img.alt);
+    el.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const video = el.querySelector("video");
+      const img = el.querySelector("img");
+      const title = el.getAttribute("data-title") || (img ? img.alt : "Artwork");
+      const desc = el.getAttribute("data-desc") || "";
+
+      if (video) {
+        const source = video.querySelector("source");
+        const vSrc = (source && source.src) ? source.src : video.src;
+        openLightbox(vSrc, true, title, desc);
+      } else if (img) {
+        openLightbox(img.currentSrc || img.src, false, title, desc);
+      }
     });
   });
 
   if (lightbox) {
-    lightbox.addEventListener("click", closeLightbox);
+    lightbox.addEventListener("click", (e) => {
+      // Close when clicking backdrop or close button, but not the image itself
+      if (e.target === lightbox || e.target.closest("#lightbox-close") || e.target.closest(".lightbox-caption")) {
+        closeLightbox();
+      }
+    });
   }
 
   document.addEventListener("keydown", (e) => {

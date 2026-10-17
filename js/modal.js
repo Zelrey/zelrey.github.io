@@ -61,6 +61,10 @@
       btn.textContent = "Sending…";
       btn.disabled = true;
     }
+    const sendFrame = document.getElementById("frame-send-message");
+    if (sendFrame && sendFrame.contentWindow) {
+      sendFrame.contentWindow.postMessage({ formState: "Sending…" }, "*");
+    }
     if (status) {
       status.textContent = "";
       status.classList.remove("is-ok", "is-err");
@@ -82,12 +86,18 @@
         status.classList.add("is-ok");
       }
       if (btn) btn.textContent = "Sent";
+      if (sendFrame && sendFrame.contentWindow) {
+        sendFrame.contentWindow.postMessage({ formState: "Sent" }, "*");
+      }
       contactForm.reset();
       setTimeout(() => {
         closeModal();
         if (btn) {
           btn.textContent = original;
           btn.disabled = false;
+        }
+        if (sendFrame && sendFrame.contentWindow) {
+          sendFrame.contentWindow.postMessage({ formState: "Send message" }, "*");
         }
         if (status) {
           status.textContent = "";
@@ -105,4 +115,25 @@
       }
     }
   });
+
+  
+  // Listen for Liquid Metal Button activate message ("Hire me", "Start a project")
+  window.addEventListener("message", (e) => {
+    if (e.data && e.data.liquidMetalButton && e.data.liquidMetalButton.type === "activate") {
+      openModal();
+    }
+  });
+
+  // Listen for Liquid Metal "Send message" button click inside modal iframe
+  window.addEventListener("message", (e) => {
+    if (e.data && e.data.liquidMetalButton && e.data.liquidMetalButton.type === "submitContact") {
+      if (contactForm) {
+        // Trigger HTML5 validation check
+        if (contactForm.reportValidity()) {
+          contactForm.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+        }
+      }
+    }
+  });
+
 })();

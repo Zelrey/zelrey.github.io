@@ -123,3 +123,27 @@
     gap: 6px;
   }
 }
+
+/* ----- Liquid Metal Button on Info Page ("Start a project") ----- */
+.liquid-metal-host--project {
+  position: relative;
+  width: 190px;
+  height: 52px;
+  margin-top: 16px;
+  cursor: pointer;
+  z-index: 10;
+  overflow: visible;
+}
+
+.liquid-metal-host--project .liquid-metal-frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 320px;
+  height: 180px;
+  border: 0;
+  background: transparent;
+  pointer-events: auto;
+  overflow: visible;
+}

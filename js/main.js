@@ -11,26 +11,60 @@
   const navCenter = document.querySelector(".nav-center");
   const navToggle = document.querySelector(".nav-toggle");
 
-  function showPage(id) {
+  let isSwitching = false;
+
+  function showPage(id, isInitial = false) {
     const target = id || "home";
-    pages.forEach((page) => {
-      page.classList.toggle("active", page.id === `page-${target}`);
-    });
+    const currentPage = document.querySelector(".page.active");
+    const nextPage = document.getElementById(`page-${target}`);
+
+    if (currentPage && currentPage.id === `page-${target}`) return;
+    if (isSwitching) return;
+
+    if (isInitial || !currentPage) {
+      pages.forEach((p) => {
+        p.classList.remove("active", "is-visible", "is-leaving");
+      });
+      if (nextPage) {
+        nextPage.classList.add("active");
+        requestAnimationFrame(() => nextPage.classList.add("is-visible"));
+      }
+      applyNavAndTheme(target);
+      return;
+    }
+
+    isSwitching = true;
+    currentPage.classList.add("is-leaving");
+
+    setTimeout(() => {
+      currentPage.classList.remove("active", "is-visible", "is-leaving");
+      if (nextPage) {
+        nextPage.classList.add("active");
+        window.scrollTo({ top: 0, behavior: "auto" });
+        requestAnimationFrame(() => {
+          nextPage.classList.add("is-visible");
+        });
+      }
+
+      applyNavAndTheme(target);
+      isSwitching = false;
+    }, 180);
+  }
+
+  function applyNavAndTheme(target) {
     document.body.classList.toggle("theme-light", target === "projects");
     navLinks.forEach((link) => {
       link.classList.toggle("active", link.getAttribute("data-nav") === target);
     });
     if (navCenter) navCenter.classList.remove("open");
-    window.scrollTo({ top: 0, behavior: "auto" });
 
-    // Trigger masonry resize for Art
-    window.dispatchEvent(new Event("resize"));
+    // Trigger masonry recalculations for Art
     window.dispatchEvent(new Event("resize"));
     setTimeout(() => {
       window.dispatchEvent(new Event("resize"));
       if (typeof resizeArtItems === "function") resizeArtItems();
-    }, 40);
-    setTimeout(() => window.dispatchEvent(new Event("resize")), 180);
+    }, 50);
+    setTimeout(() => window.dispatchEvent(new Event("resize")), 220);
 
     if (history.replaceState) {
       history.replaceState(null, "", `#${target}`);
@@ -47,7 +81,7 @@
   });
 
   const initial = (location.hash || "#home").replace("#", "") || "home";
-  showPage(PAGES.includes(initial) ? initial : "home");
+  showPage(PAGES.includes(initial) ? initial : "home", true);
 
   window.addEventListener("hashchange", () => {
     const h = (location.hash || "#home").replace("#", "");
@@ -139,7 +173,36 @@
       reset();
       startLoop();
     });
+  
+  /* =========================================================
+     Live Digital Clock (Cebu / CCU Timezone)
+     ========================================================= */
+  (function initLiveClock() {
+    const clockElements = document.querySelectorAll(".clock-digits");
+    if (!clockElements.length) return;
+
+    function updateClock() {
+      const now = new Date();
+      // Format to Asia/Manila (Cebu) 24-hour time HH:MM:SS
+      const timeStr = now.toLocaleTimeString("en-GB", {
+        timeZone: "Asia/Manila",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      });
+
+      const formatted = `${timeStr} CCU`;
+      clockElements.forEach((el) => {
+        el.textContent = formatted;
+      });
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
   })();
+
+})();
 
   /* ----- Liquid Metal Button postMessage bridge ----- */
   window.addEventListener("message", (e) => {
@@ -151,5 +214,34 @@
       }
     }
   });
+
+
+  /* =========================================================
+     Live Digital Clock (Cebu / CCU Timezone)
+     ========================================================= */
+  (function initLiveClock() {
+    const clockElements = document.querySelectorAll(".clock-digits");
+    if (!clockElements.length) return;
+
+    function updateClock() {
+      const now = new Date();
+      // Format to Asia/Manila (Cebu) 24-hour time HH:MM:SS
+      const timeStr = now.toLocaleTimeString("en-GB", {
+        timeZone: "Asia/Manila",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      });
+
+      const formatted = `${timeStr} CCU`;
+      clockElements.forEach((el) => {
+        el.textContent = formatted;
+      });
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+  })();
 
 })();

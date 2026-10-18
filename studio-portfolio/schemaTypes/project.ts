@@ -18,6 +18,20 @@ export const projectType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'description',
+      title: 'Project Description / Story',
+      type: 'text',
+      rows: 3,
+      description: 'Explain the concept, strategy, or design process.',
+    }),
+    defineField({
+      name: 'spanTwoColumns',
+      title: 'Occupy 2 Columns (Feature Tile)',
+      type: 'boolean',
+      description: 'Check to make this project feature wide tiles across 2 columns',
+      initialValue: false,
+    }),
+    defineField({
       name: 'year',
       title: 'Year (e.g. 2026)',
       type: 'string',

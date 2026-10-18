@@ -230,3 +230,24 @@ body.theme-light .nav-toggle span::after {
     gap: 6px;
   }
 }
+
+/* Project Description Paragraph */
+.project-group-desc {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #71717a;
+  max-width: 640px;
+  margin: 6px 0 0;
+}
+
+/* Feature 2-Column Span in Projects Grid */
+.project-item-span2 {
+  grid-column: span 2;
+}
+
+.project-thumb video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}

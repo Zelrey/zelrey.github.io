@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Zelrey — Portfolio Content Manager</title>
+  <title>Zelrey — Portfolio Content Studio</title>
   <link rel="icon" href="images/avatar.webp" type="image/webp" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,10 +22,10 @@
     }
     .admin-container {
       width: 100%;
-      max-width: 640px;
+      max-width: 680px;
     }
     .admin-header {
-      margin-bottom: 32px;
+      margin-bottom: 28px;
       text-align: center;
     }
     .admin-header h1 {
@@ -38,6 +38,33 @@
       font-size: 14px;
       color: #92929e;
     }
+    /* Mode switcher tabs */
+    .admin-tabs {
+      display: flex;
+      gap: 6px;
+      background: #14151c;
+      padding: 5px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 24px;
+    }
+    .admin-tab {
+      flex: 1;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 0;
+      background: transparent;
+      color: #8c8c9a;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .admin-tab.active {
+      background: #ffffff;
+      color: #0a0a0a;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
     .admin-card {
       background: #121318;
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -45,6 +72,10 @@
       padding: 28px 24px;
       margin-bottom: 24px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      display: none;
+    }
+    .admin-card.active {
+      display: block;
     }
     .form-group {
       margin-bottom: 20px;
@@ -97,6 +128,12 @@
       border-radius: 8px;
       object-fit: contain;
     }
+    .files-list {
+      margin-top: 12px;
+      font-size: 12.5px;
+      color: #34d399;
+      line-height: 1.5;
+    }
     .submit-btn {
       width: 100%;
       background: #ffffff;
@@ -109,6 +146,7 @@
       letter-spacing: -0.02em;
       cursor: pointer;
       transition: transform 0.2s, background 0.2s;
+      margin-top: 8px;
     }
     .submit-btn:hover {
       background: #e8e8ed;
@@ -126,175 +164,310 @@
     }
     .status-msg.ok { color: #34d399; }
     .status-msg.err { color: #f87171; }
-    .token-box {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 12px;
-      padding: 16px;
-      font-size: 12.5px;
-      color: #a0a0ab;
-      line-height: 1.5;
-      margin-bottom: 24px;
-    }
-    .token-box a { color: #fff; }
   </style>
 </head>
 <body>
   <div class="admin-container">
     <header class="admin-header">
-      <h1>Art & Project Uploader</h1>
-      <p>Upload artwork directly to your portfolio without editing code</p>
+      <h1>Zelrey Studio Manager</h1>
+      <p>Publish artworks and full project showcases directly to your live portfolio</p>
     </header>
 
-    <div class="token-box">
-      <strong>One-time key:</strong> Your private Sanity credentials are fully connected and authenticated! You can now drag and drop artworks below to publish directly to your live portfolio.
+    <!-- Navigation Tabs -->
+    <div class="admin-tabs">
+      <button class="admin-tab active" id="tab-art" type="button">🎨 Artworks</button>
+      <button class="admin-tab" id="tab-proj" type="button">📁 Projects</button>
     </div>
 
-    <form class="admin-card" id="upload-form">
+    <!-- Hidden Token -->
+    <input type="hidden" id="token" value="ska1tnKSQZ3v8vYhgF8ni0jFVw8ffA2mprahmSMYSo8jjOzGIVIsSL4pe4tfjpmN1vMQZ9fqtCHp0gk9oG3TiWK4PwyITKVIZ9n1eRgsL0tjHsNnnDzF9z3oyktQLBtb5s5u4Ss6FJPxnKKjMXxL4ck25w4u54GlVvlEfSyrPShqj6JEuD1u" />
+
+    <!-- 1. ARTWORKS FORM -->
+    <form class="admin-card active" id="art-form">
       <div class="form-group">
-        <label for="token">Sanity API Token (Saved locally on your browser)</label>
-        <input class="form-control" type="password" id="token" value="ska1tnKSQZ3v8vYhgF8ni0jFVw8ffA2mprahmSMYSo8jjOzGIVIsSL4pe4tfjpmN1vMQZ9fqtCHp0gk9oG3TiWK4PwyITKVIZ9n1eRgsL0tjHsNnnDzF9z3oyktQLBtb5s5u4Ss6FJPxnKKjMXxL4ck25w4u54GlVvlEfSyrPShqj6JEuD1u" required readonly style="opacity: 0.7; cursor: not-allowed;" />
+        <label for="art-title">Artwork Title</label>
+        <input class="form-control" type="text" id="art-title" placeholder="e.g. New Portrait Study" required />
       </div>
 
       <div class="form-group">
-        <label for="title">Artwork Title</label>
-        <input class="form-control" type="text" id="title" placeholder="e.g. New Portrait Study" required />
-      </div>
-
-      <div class="form-group">
-        <label for="order">Display Order</label>
-        <input class="form-control" type="number" id="order" value="1" />
+        <label for="art-order">Display Order</label>
+        <input class="form-control" type="number" id="art-order" value="1" />
       </div>
 
       <div class="form-group">
         <label>Artwork File (Image or MP4 Video)</label>
-        <div class="drop-zone" id="drop-zone">
-          <input type="file" id="file-input" accept="image/*,video/mp4" required />
-          <p class="drop-zone-text" id="drop-text">Click or drag &amp; drop artwork here</p>
-          <img class="drop-preview" id="preview-img" alt="Preview" />
+        <div class="drop-zone" id="art-drop-zone">
+          <input type="file" id="art-file-input" accept="image/*,video/mp4" required />
+          <p class="drop-zone-text" id="art-drop-text">Click or drag &amp; drop artwork here</p>
+          <img class="drop-preview" id="art-preview-img" alt="Preview" />
         </div>
       </div>
 
-      <button class="submit-btn" type="submit" id="submit-btn">Publish to Website</button>
-      <div class="status-msg" id="status-msg"></div>
+      <button class="submit-btn" type="submit" id="art-submit-btn">Publish Artwork</button>
+      <div class="status-msg" id="art-status-msg"></div>
+    </form>
+
+    <!-- 2. PROJECTS FORM -->
+    <form class="admin-card" id="proj-form">
+      <div class="form-group">
+        <label for="proj-title">Project Title</label>
+        <input class="form-control" type="text" id="proj-title" placeholder="e.g. JPARK SUITES or BIOME CAFÉ" required />
+      </div>
+
+      <div class="form-group">
+        <label for="proj-discipline">Discipline / Category</label>
+        <input class="form-control" type="text" id="proj-discipline" placeholder="e.g. Branding, Logo &amp; Layouts" required />
+      </div>
+
+      <div class="form-group">
+        <label for="proj-year">Year</label>
+        <input class="form-control" type="text" id="proj-year" value="2026" required />
+      </div>
+
+      <div class="form-group">
+        <label for="proj-desc">Project Description</label>
+        <textarea class="form-control" id="proj-desc" rows="3" placeholder="Describe the project concept, strategy, client, or visual direction..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="proj-order">Display Order</label>
+        <input class="form-control" type="number" id="proj-order" value="1" />
+      </div>
+
+      <div class="form-group">
+        <label>Layout Option</label>
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13.5px; color: #ecece8; margin-top: 4px;">
+          <input type="checkbox" id="proj-span2" style="width: 16px; height: 16px; accent-color: #ffffff;" />
+          Occupy 2 columns (Feature Wide Tile)
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label>Project Media (Images or Looping MP4 Video)</label>
+        <div class="drop-zone" id="proj-drop-zone">
+          <input type="file" id="proj-file-input" accept="image/*,video/mp4" multiple required />
+          <p class="drop-zone-text" id="proj-drop-text">Click or drag &amp; drop photos or MP4 video here (Select multiple!)</p>
+          <div class="files-list" id="proj-files-list"></div>
+        </div>
+      </div>
+
+      <button class="submit-btn" type="submit" id="proj-submit-btn">Publish Project Showcase</button>
+      <div class="status-msg" id="proj-status-msg"></div>
     </form>
   </div>
 
   <script>
     const PROJECT_ID = "nczz4q4p";
     const DATASET = "production";
+    const token = document.getElementById("token").value;
 
-    const tokenInput = document.getElementById("token");
-    const dropZone = document.getElementById("drop-zone");
-    const fileInput = document.getElementById("file-input");
-    const dropText = document.getElementById("drop-text");
-    const previewImg = document.getElementById("preview-img");
-    const uploadForm = document.getElementById("upload-form");
-    const submitBtn = document.getElementById("submit-btn");
-    const statusMsg = document.getElementById("status-msg");
+    // Tab switching
+    const tabArt = document.getElementById("tab-art");
+    const tabProj = document.getElementById("tab-proj");
+    const artForm = document.getElementById("art-form");
+    const projForm = document.getElementById("proj-form");
 
-    // Load saved token from localStorage so you only paste it once
-    if (localStorage.getItem("sanity_write_token")) {
-      tokenInput.value = localStorage.getItem("sanity_write_token");
+    tabArt.addEventListener("click", () => {
+      tabArt.classList.add("active");
+      tabProj.classList.remove("active");
+      artForm.classList.add("active");
+      projForm.classList.remove("active");
+    });
+
+    tabProj.addEventListener("click", () => {
+      tabProj.classList.add("active");
+      tabArt.classList.remove("active");
+      projForm.classList.add("active");
+      artForm.classList.remove("active");
+    });
+
+    // Helper: Upload asset to Sanity
+    async function uploadAsset(file) {
+      const isVideo = file.type === "video/mp4";
+      const endpoint = isVideo
+        ? `https://${PROJECT_ID}.api.sanity.io/v2024-01-01/assets/files/${DATASET}`
+        : `https://${PROJECT_ID}.api.sanity.io/v2024-01-01/assets/images/${DATASET}`;
+
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": file.type,
+        },
+        body: file,
+      });
+
+      if (!res.ok) throw new Error(`Upload failed for ${file.name}`);
+      const data = await res.json();
+      return data.document._id;
     }
 
-    dropZone.addEventListener("click", () => fileInput.click());
+    // --- ARTWORK UPLOAD ---
+    const artDrop = document.getElementById("art-drop-zone");
+    const artInput = document.getElementById("art-file-input");
+    const artDropText = document.getElementById("art-drop-text");
+    const artPreview = document.getElementById("art-preview-img");
+    const artSubmit = document.getElementById("art-submit-btn");
+    const artStatus = document.getElementById("art-status-msg");
 
-    fileInput.addEventListener("change", () => {
-      const file = fileInput.files[0];
+    artDrop.addEventListener("click", () => artInput.click());
+    artInput.addEventListener("change", () => {
+      const file = artInput.files[0];
       if (file) {
-        dropText.textContent = `${file.name} (${(file.size / (1024*1024)).toFixed(2)} MB)`;
+        artDropText.textContent = `${file.name} (${(file.size / (1024*1024)).toFixed(2)} MB)`;
         if (file.type.startsWith("image/")) {
-          previewImg.src = URL.createObjectURL(file);
-          previewImg.style.display = "block";
+          artPreview.src = URL.createObjectURL(file);
+          artPreview.style.display = "block";
         } else {
-          previewImg.style.display = "none";
+          artPreview.style.display = "none";
         }
       }
     });
 
-    uploadForm.addEventListener("submit", async (e) => {
+    artForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const token = tokenInput.value.trim();
-      const title = document.getElementById("title").value.trim();
-      const order = parseInt(document.getElementById("order").value) || 1;
-      const file = fileInput.files[0];
+      const title = document.getElementById("art-title").value.trim();
+      const order = parseInt(document.getElementById("art-order").value) || 1;
+      const file = artInput.files[0];
+      if (!file) return;
 
-      if (!file || !token) return;
-
-      localStorage.setItem("sanity_write_token", token);
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Uploading asset...";
-      statusMsg.className = "status-msg";
-      statusMsg.textContent = "Uploading to Sanity CDN...";
+      artSubmit.disabled = true;
+      artSubmit.textContent = "Uploading artwork...";
+      artStatus.className = "status-msg";
+      artStatus.textContent = "Uploading to Sanity CDN...";
 
       try {
+        const assetId = await uploadAsset(file);
         const isVideo = file.type === "video/mp4";
-        const assetEndpoint = isVideo
-          ? `https://${PROJECT_ID}.api.sanity.io/v2024-01-01/assets/files/${DATASET}`
-          : `https://${PROJECT_ID}.api.sanity.io/v2024-01-01/assets/images/${DATASET}`;
 
-        // 1. Upload asset binary
-        const assetRes = await fetch(assetEndpoint, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": file.type,
-          },
-          body: file,
-        });
-
-        if (!assetRes.ok) {
-          throw new Error("Asset upload failed. Please check your API token permissions.");
-        }
-
-        const assetData = await assetRes.json();
-        const assetId = assetData.document._id;
-
-        submitBtn.textContent = "Publishing document...";
-        statusMsg.textContent = "Creating live artwork record...";
-
-        // 2. Create document record
-        const docPayload = {
-          mutations: [
-            {
-              create: {
-                _type: "artwork",
-                title: title,
-                order: order,
-                mediaType: isVideo ? "video" : "image",
-                image: !isVideo ? { _type: "image", asset: { _ref: assetId, _type: "reference" } } : undefined,
-                videoFile: isVideo ? { _type: "file", asset: { _ref: assetId, _type: "reference" } } : undefined,
-              },
-            },
-          ],
+        artStatus.textContent = "Publishing to live site...";
+        const payload = {
+          mutations: [{
+            create: {
+              _type: "artwork",
+              title,
+              order,
+              mediaType: isVideo ? "video" : "image",
+              image: !isVideo ? { _type: "image", asset: { _ref: assetId, _type: "reference" } } : undefined,
+              videoFile: isVideo ? { _type: "file", asset: { _ref: assetId, _type: "reference" } } : undefined,
+            }
+          }]
         };
 
-        const mutateRes = await fetch(`https://${PROJECT_ID}.api.sanity.io/v2024-01-01/data/mutate/${DATASET}`, {
+        const res = await fetch(`https://${PROJECT_ID}.api.sanity.io/v2024-01-01/data/mutate/${DATASET}`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(docPayload),
+          body: JSON.stringify(payload),
         });
 
-        if (!mutateRes.ok) {
-          throw new Error("Publishing record failed.");
+        if (!res.ok) throw new Error("Could not publish record.");
+
+        artStatus.className = "status-msg ok";
+        artStatus.textContent = "✓ Published! Artwork is now live on your website.";
+        artForm.reset();
+        artPreview.style.display = "none";
+        artDropText.textContent = "Click or drag & drop artwork here";
+      } catch (err) {
+        artStatus.className = "status-msg err";
+        artStatus.textContent = err.message || "Upload failed.";
+      } finally {
+        artSubmit.disabled = false;
+        artSubmit.textContent = "Publish Artwork";
+      }
+    });
+
+    // --- PROJECTS UPLOAD ---
+    const projDrop = document.getElementById("proj-drop-zone");
+    const projInput = document.getElementById("proj-file-input");
+    const projDropText = document.getElementById("proj-drop-text");
+    const projFilesList = document.getElementById("proj-files-list");
+    const projSubmit = document.getElementById("proj-submit-btn");
+    const projStatus = document.getElementById("proj-status-msg");
+
+    projDrop.addEventListener("click", () => projInput.click());
+    projInput.addEventListener("change", () => {
+      const files = Array.from(projInput.files);
+      if (files.length) {
+        projDropText.textContent = `${files.length} images selected`;
+        projFilesList.innerHTML = files.map(f => `<div>✓ ${f.name} (${(f.size/1024).toFixed(0)} KB)</div>`).join("");
+      }
+    });
+
+    projForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const title = document.getElementById("proj-title").value.trim();
+      const discipline = document.getElementById("proj-discipline").value.trim();
+      const year = document.getElementById("proj-year").value.trim();
+      const description = document.getElementById("proj-desc").value.trim();
+      const spanTwoColumns = document.getElementById("proj-span2").checked;
+      const order = parseInt(document.getElementById("proj-order").value) || 1;
+      const files = Array.from(projInput.files);
+      if (!files.length) return;
+
+      projSubmit.disabled = true;
+      projStatus.className = "status-msg";
+
+      try {
+        const mediaAssets = [];
+        for (let i = 0; i < files.length; i++) {
+          const f = files[i];
+          const isVid = f.type === "video/mp4";
+          projSubmit.textContent = `Uploading media ${i + 1} of ${files.length}...`;
+          projStatus.textContent = `Uploading ${f.name}...`;
+          const assetId = await uploadAsset(f);
+
+          mediaAssets.push({
+            _type: isVid ? "file" : "image",
+            _key: "media_" + Date.now() + "_" + i,
+            mediaType: isVid ? "video" : "image",
+            asset: { _ref: assetId, _type: "reference" },
+            alt: `${title} — ${discipline} ${i + 1}`,
+          });
         }
 
-        statusMsg.className = "status-msg ok";
-        statusMsg.textContent = "✓ Published! Artwork is now live on your website.";
-        uploadForm.reset();
-        tokenInput.value = token;
-        previewImg.style.display = "none";
-        dropText.textContent = "Click or drag & drop artwork here";
+        projSubmit.textContent = "Publishing project...";
+        projStatus.textContent = "Creating live project showcase...";
+
+        const payload = {
+          mutations: [{
+            create: {
+              _type: "project",
+              title,
+              discipline,
+              year,
+              description,
+              spanTwoColumns,
+              order,
+              images: mediaAssets,
+            }
+          }]
+        };
+
+        const res = await fetch(`https://${PROJECT_ID}.api.sanity.io/v2024-01-01/data/mutate/${DATASET}`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) throw new Error("Could not publish project showcase.");
+
+        projStatus.className = "status-msg ok";
+        projStatus.textContent = "✓ Published! New Project is now live with its view switcher grid.";
+        projForm.reset();
+        projFilesList.innerHTML = "";
+        projDropText.textContent = "Click or drag & drop all project images here (Select multiple!)";
       } catch (err) {
-        statusMsg.className = "status-msg err";
-        statusMsg.textContent = err.message || "Upload failed.";
+        projStatus.className = "status-msg err";
+        projStatus.textContent = err.message || "Project upload failed.";
       } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Publish to Website";
+        projSubmit.disabled = false;
+        projSubmit.textContent = "Publish Project Showcase";
       }
     });
   </script>

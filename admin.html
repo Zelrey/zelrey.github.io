@@ -38,7 +38,6 @@
       font-size: 14px;
       color: #92929e;
     }
-    /* Mode switcher tabs */
     .admin-tabs {
       display: flex;
       gap: 6px;
@@ -164,13 +163,19 @@
     }
     .status-msg.ok { color: #34d399; }
     .status-msg.err { color: #f87171; }
+    .badge-count {
+      display: inline-block;
+      font-size: 11.5px;
+      color: #a0a0ab;
+      margin-top: 4px;
+    }
   </style>
 </head>
 <body>
   <div class="admin-container">
     <header class="admin-header">
       <h1>Zelrey Studio Manager</h1>
-      <p>Publish artworks and full project showcases directly to your live portfolio</p>
+      <p>Publish artworks and complete project showcases directly to your live portfolio</p>
     </header>
 
     <!-- Navigation Tabs -->
@@ -186,7 +191,12 @@
     <form class="admin-card active" id="art-form">
       <div class="form-group">
         <label for="art-title">Artwork Title</label>
-        <input class="form-control" type="text" id="art-title" placeholder="e.g. New Portrait Study" required />
+        <input class="form-control" type="text" id="art-title" placeholder="e.g. Wings, GAO Uniforms, Sunset Tower" required />
+      </div>
+
+      <div class="form-group">
+        <label for="art-desc">Artwork Description</label>
+        <textarea class="form-control" id="art-desc" rows="3" placeholder="Explain the artwork concept, medium, tools used, or character context..."></textarea>
       </div>
 
       <div class="form-group">
@@ -195,10 +205,18 @@
       </div>
 
       <div class="form-group">
-        <label>Artwork File (Image or MP4 Video)</label>
+        <label>Layout Option</label>
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13.5px; color: #ecece8; margin-top: 4px;">
+          <input type="checkbox" id="art-span2" style="width: 16px; height: 16px; accent-color: #ffffff;" />
+          Occupy 2 columns in Art gallery (Feature Centerpiece)
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label>Artwork Media (Image or Looping MP4 Video)</label>
         <div class="drop-zone" id="art-drop-zone">
           <input type="file" id="art-file-input" accept="image/*,video/mp4" required />
-          <p class="drop-zone-text" id="art-drop-text">Click or drag &amp; drop artwork here</p>
+          <p class="drop-zone-text" id="art-drop-text">Click or drag &amp; drop image or MP4 video here</p>
           <img class="drop-preview" id="art-preview-img" alt="Preview" />
         </div>
       </div>
@@ -207,7 +225,7 @@
       <div class="status-msg" id="art-status-msg"></div>
     </form>
 
-    <!-- 2. PROJECTS FORM -->
+    <!-- 2. PROJECTS FORM (Minimum 4 artworks per project, NO 2-column option) -->
     <form class="admin-card" id="proj-form">
       <div class="form-group">
         <label for="proj-title">Project Title</label>
@@ -216,7 +234,7 @@
 
       <div class="form-group">
         <label for="proj-discipline">Discipline / Category</label>
-        <input class="form-control" type="text" id="proj-discipline" placeholder="e.g. Branding, Logo &amp; Layouts" required />
+        <input class="form-control" type="text" id="proj-discipline" placeholder="e.g. 3D Layout &amp; Photography, Branding, Logo &amp; Layouts" required />
       </div>
 
       <div class="form-group">
@@ -225,8 +243,8 @@
       </div>
 
       <div class="form-group">
-        <label for="proj-desc">Project Description</label>
-        <textarea class="form-control" id="proj-desc" rows="3" placeholder="Describe the project concept, strategy, client, or visual direction..."></textarea>
+        <label for="proj-desc">Project Description (Optional)</label>
+        <textarea class="form-control" id="proj-desc" rows="3" placeholder="Describe the design concept, strategy, or visual direction..."></textarea>
       </div>
 
       <div class="form-group">
@@ -235,18 +253,10 @@
       </div>
 
       <div class="form-group">
-        <label>Layout Option</label>
-        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13.5px; color: #ecece8; margin-top: 4px;">
-          <input type="checkbox" id="proj-span2" style="width: 16px; height: 16px; accent-color: #ffffff;" />
-          Occupy 2 columns (Feature Wide Tile)
-        </label>
-      </div>
-
-      <div class="form-group">
-        <label>Project Media (Images or Looping MP4 Video)</label>
+        <label>Project Artworks <span class="badge-count">(Minimum 4 required)</span></label>
         <div class="drop-zone" id="proj-drop-zone">
           <input type="file" id="proj-file-input" accept="image/*,video/mp4" multiple required />
-          <p class="drop-zone-text" id="proj-drop-text">Click or drag &amp; drop photos or MP4 video here (Select multiple!)</p>
+          <p class="drop-zone-text" id="proj-drop-text">Click or drag &amp; drop at least 4 artworks/images here</p>
           <div class="files-list" id="proj-files-list"></div>
         </div>
       </div>
@@ -261,7 +271,7 @@
     const DATASET = "production";
     const token = document.getElementById("token").value;
 
-    // Tab switching
+    // Tabs
     const tabArt = document.getElementById("tab-art");
     const tabProj = document.getElementById("tab-proj");
     const artForm = document.getElementById("art-form");
@@ -281,7 +291,6 @@
       artForm.classList.remove("active");
     });
 
-    // Helper: Upload asset to Sanity
     async function uploadAsset(file) {
       const isVideo = file.type === "video/mp4";
       const endpoint = isVideo
@@ -302,7 +311,7 @@
       return data.document._id;
     }
 
-    // --- ARTWORK UPLOAD ---
+    // --- ARTWORK FORM SUBMISSION ---
     const artDrop = document.getElementById("art-drop-zone");
     const artInput = document.getElementById("art-file-input");
     const artDropText = document.getElementById("art-drop-text");
@@ -327,12 +336,14 @@
     artForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const title = document.getElementById("art-title").value.trim();
+      const description = document.getElementById("art-desc").value.trim();
+      const spanTwoColumns = document.getElementById("art-span2").checked;
       const order = parseInt(document.getElementById("art-order").value) || 1;
       const file = artInput.files[0];
       if (!file) return;
 
       artSubmit.disabled = true;
-      artSubmit.textContent = "Uploading artwork...";
+      artSubmit.textContent = "Uploading asset...";
       artStatus.className = "status-msg";
       artStatus.textContent = "Uploading to Sanity CDN...";
 
@@ -346,6 +357,8 @@
             create: {
               _type: "artwork",
               title,
+              description,
+              spanTwoColumns,
               order,
               mediaType: isVideo ? "video" : "image",
               image: !isVideo ? { _type: "image", asset: { _ref: assetId, _type: "reference" } } : undefined,
@@ -366,10 +379,10 @@
         if (!res.ok) throw new Error("Could not publish record.");
 
         artStatus.className = "status-msg ok";
-        artStatus.textContent = "✓ Published! Artwork is now live on your website.";
+        artStatus.textContent = "✓ Published! Artwork is now live on your website with title & description.";
         artForm.reset();
         artPreview.style.display = "none";
-        artDropText.textContent = "Click or drag & drop artwork here";
+        artDropText.textContent = "Click or drag & drop image or MP4 video here";
       } catch (err) {
         artStatus.className = "status-msg err";
         artStatus.textContent = err.message || "Upload failed.";
@@ -379,7 +392,7 @@
       }
     });
 
-    // --- PROJECTS UPLOAD ---
+    // --- PROJECTS FORM SUBMISSION (Min 4 artworks enforced) ---
     const projDrop = document.getElementById("proj-drop-zone");
     const projInput = document.getElementById("proj-file-input");
     const projDropText = document.getElementById("proj-drop-text");
@@ -390,22 +403,29 @@
     projDrop.addEventListener("click", () => projInput.click());
     projInput.addEventListener("change", () => {
       const files = Array.from(projInput.files);
-      if (files.length) {
-        projDropText.textContent = `${files.length} images selected`;
+      if (files.length < 4) {
+        projDropText.textContent = `⚠️ You selected ${files.length} files. Minimum 4 required.`;
+        projFilesList.innerHTML = `<span style="color: #f87171;">Please select at least 4 artworks for this project.</span>`;
+      } else {
+        projDropText.textContent = `${files.length} artworks selected`;
         projFilesList.innerHTML = files.map(f => `<div>✓ ${f.name} (${(f.size/1024).toFixed(0)} KB)</div>`).join("");
       }
     });
 
     projForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+      const files = Array.from(projInput.files);
+      if (files.length < 4) {
+        projStatus.className = "status-msg err";
+        projStatus.textContent = `Please select at least 4 artworks for this project showcase (currently selected: ${files.length}).`;
+        return;
+      }
+
       const title = document.getElementById("proj-title").value.trim();
       const discipline = document.getElementById("proj-discipline").value.trim();
       const year = document.getElementById("proj-year").value.trim();
       const description = document.getElementById("proj-desc").value.trim();
-      const spanTwoColumns = document.getElementById("proj-span2").checked;
       const order = parseInt(document.getElementById("proj-order").value) || 1;
-      const files = Array.from(projInput.files);
-      if (!files.length) return;
 
       projSubmit.disabled = true;
       projStatus.className = "status-msg";
@@ -415,13 +435,13 @@
         for (let i = 0; i < files.length; i++) {
           const f = files[i];
           const isVid = f.type === "video/mp4";
-          projSubmit.textContent = `Uploading media ${i + 1} of ${files.length}...`;
+          projSubmit.textContent = `Uploading artwork ${i + 1} of ${files.length}...`;
           projStatus.textContent = `Uploading ${f.name}...`;
           const assetId = await uploadAsset(f);
 
           mediaAssets.push({
             _type: isVid ? "file" : "image",
-            _key: "media_" + Date.now() + "_" + i,
+            _key: "art_" + Date.now() + "_" + i,
             mediaType: isVid ? "video" : "image",
             asset: { _ref: assetId, _type: "reference" },
             alt: `${title} — ${discipline} ${i + 1}`,
@@ -439,7 +459,6 @@
               discipline,
               year,
               description,
-              spanTwoColumns,
               order,
               images: mediaAssets,
             }
@@ -458,10 +477,10 @@
         if (!res.ok) throw new Error("Could not publish project showcase.");
 
         projStatus.className = "status-msg ok";
-        projStatus.textContent = "✓ Published! New Project is now live with its view switcher grid.";
+        projStatus.textContent = `✓ Published! Project "${title}" is now live with all ${files.length} artworks.`;
         projForm.reset();
         projFilesList.innerHTML = "";
-        projDropText.textContent = "Click or drag & drop all project images here (Select multiple!)";
+        projDropText.textContent = "Click or drag & drop at least 4 artworks/images here";
       } catch (err) {
         projStatus.className = "status-msg err";
         projStatus.textContent = err.message || "Project upload failed.";

@@ -60,7 +60,7 @@
         figure.className = "art-item" + (item.spanTwoColumns ? " art-item-span2" : "");
         figure.setAttribute("data-lightbox", "");
         figure.setAttribute("data-title", item.title || "Artwork");
-        figure.setAttribute("data-desc", "Published from Zelrey Art Studio.");
+        figure.setAttribute("data-desc", item.description || "Artwork by Zelrey");
 
         if (isVideo) {
           figure.innerHTML = `

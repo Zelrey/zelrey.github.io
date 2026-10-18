@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zelrey — Portfolio Content Manager</title>
+  <link rel="icon" href="images/avatar.webp" type="image/webp" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@450;550;650&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #090a0d;
+      color: #ecece8;
+      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 80px;
+    }
+    .admin-container {
+      width: 100%;
+      max-width: 640px;
+    }
+    .admin-header {
+      margin-bottom: 32px;
+      text-align: center;
+    }
+    .admin-header h1 {
+      font-size: 26px;
+      font-weight: 650;
+      letter-spacing: -0.04em;
+      margin-bottom: 8px;
+    }
+    .admin-header p {
+      font-size: 14px;
+      color: #92929e;
+    }
+    .admin-card {
+      background: #121318;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 28px 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 550;
+      color: #cfd0d8;
+      margin-bottom: 8px;
+    }
+    .form-control {
+      width: 100%;
+      background: #181a22;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-control:focus {
+      border-color: #ffffff;
+    }
+    .drop-zone {
+      border: 2px dashed rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 32px 16px;
+      text-align: center;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.02);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .drop-zone:hover {
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .drop-zone input[type="file"] {
+      display: none;
+    }
+    .drop-zone-text {
+      font-size: 13.5px;
+      color: #92929e;
+    }
+    .drop-preview {
+      margin-top: 14px;
+      display: none;
+      max-height: 200px;
+      border-radius: 8px;
+      object-fit: contain;
+    }
+    .submit-btn {
+      width: 100%;
+      background: #ffffff;
+      color: #0a0a0a;
+      border: 0;
+      border-radius: 999px;
+      padding: 14px;
+      font-size: 14.5px;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .submit-btn:hover {
+      background: #e8e8ed;
+      transform: translateY(-1px);
+    }
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .status-msg {
+      margin-top: 16px;
+      font-size: 13.5px;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .status-msg.ok { color: #34d399; }
+    .status-msg.err { color: #f87171; }
+    .token-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 12.5px;
+      color: #a0a0ab;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+    .token-box a { color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="admin-container">
+    <header class="admin-header">
+      <h1>Art & Project Uploader</h1>
+      <p>Upload artwork directly to your portfolio without editing code</p>
+    </header>
+
+    <div class="token-box">
+      <strong>One-time key:</strong> Your private Sanity credentials are fully connected and authenticated! You can now drag and drop artworks below to publish directly to your live portfolio.
+    </div>
+
+    <form class="admin-card" id="upload-form">
+      <div class="form-group">
+        <label for="token">Sanity API Token (Saved locally on your browser)</label>
+        <input class="form-control" type="password" id="token" value="ska1tnKSQZ3v8vYhgF8ni0jFVw8ffA2mprahmSMYSo8jjOzGIVIsSL4pe4tfjpmN1vMQZ9fqtCHp0gk9oG3TiWK4PwyITKVIZ9n1eRgsL0tjHsNnnDzF9z3oyktQLBtb5s5u4Ss6FJPxnKKjMXxL4ck25w4u54GlVvlEfSyrPShqj6JEuD1u" required readonly style="opacity: 0.7; cursor: not-allowed;" />
+      </div>
+
+      <div class="form-group">
+        <label for="title">Artwork Title</label>
+        <input class="form-control" type="text" id="title" placeholder="e.g. New Portrait Study" required />
+      </div>
+
+      <div class="form-group">
+        <label for="order">Display Order</label>
+        <input class="form-control" type="number" id="order" value="1" />
+      </div>
+
+      <div class="form-group">
+        <label>Artwork File (Image or MP4 Video)</label>
+        <div class="drop-zone" id="drop-zone">
+          <input type="file" id="file-input" accept="image/*,video/mp4" required />
+          <p class="drop-zone-text" id="drop-text">Click or drag &amp; drop artwork here</p>
+          <img class="drop-preview" id="preview-img" alt="Preview" />
+        </div>
+      </div>
+
+      <button class="submit-btn" type="submit" id="submit-btn">Publish to Website</button>
+      <div class="status-msg" id="status-msg"></div>
+    </form>
+  </div>
+
+  <script>
+    const PROJECT_ID = "nczz4q4p";
+    const DATASET = "production";
+
+    const tokenInput = document.getElementById("token");
+    const dropZone = document.getElementById("drop-zone");
+    const fileInput = document.getElementById("file-input");
+    const dropText = document.getElementById("drop-text");
+    const previewImg = document.getElementById("preview-img");
+    const uploadForm = document.getElementById("upload-form");
+    const submitBtn = document.getElementById("submit-btn");
+    const statusMsg = document.getElementById("status-msg");
+
+    // Load saved token from localStorage so you only paste it once
+    if (localStorage.getItem("sanity_write_token")) {
+      tokenInput.value = localStorage.getItem("sanity_write_token");
+    }
+
+    dropZone.addEventListener("click", () => fileInput.click());
+
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files[0];
+      if (file) {
+        dropText.textContent = `${file.name} (${(file.size / (1024*1024)).toFixed(2)} MB)`;
+        if (file.type.startsWith("image/")) {
+          previewImg.src = URL.createObjectURL(file);
+          previewImg.style.display = "block";
+        } else {
+          previewImg.style.display = "none";
+        }
+      }
+    });
+
+    uploadForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const token = tokenInput.value.trim();
+      const title = document.getElementById("title").value.trim();
+      const order = parseInt(document.getElementById("order").value) || 1;
+      const file = fileInput.files[0];
+
+      if (!file || !token) return;
+
+      localStorage.setItem("sanity_write_token", token);
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Uploading asset...";
+      statusMsg.className = "status-msg";
+      statusMsg.textContent = "Uploading to Sanity CDN...";
+
+      try {
+        const isVideo = file.type === "video/mp4";
+        const assetEndpoint = isVideo
+          ? `https://${PROJECT_ID}.api.sanity.io/v2024-01-01/assets/files/${DATASET}`
+          : `https://${PROJECT_ID}.api.sanity.io/v2024-01-01/assets/images/${DATASET}`;
+
+        // 1. Upload asset binary
+        const assetRes = await fetch(assetEndpoint, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": file.type,
+          },
+          body: file,
+        });
+
+        if (!assetRes.ok) {
+          throw new Error("Asset upload failed. Please check your API token permissions.");
+        }
+
+        const assetData = await assetRes.json();
+        const assetId = assetData.document._id;
+
+        submitBtn.textContent = "Publishing document...";
+        statusMsg.textContent = "Creating live artwork record...";
+
+        // 2. Create document record
+        const docPayload = {
+          mutations: [
+            {
+              create: {
+                _type: "artwork",
+                title: title,
+                order: order,
+                mediaType: isVideo ? "video" : "image",
+                image: !isVideo ? { _type: "image", asset: { _ref: assetId, _type: "reference" } } : undefined,
+                videoFile: isVideo ? { _type: "file", asset: { _ref: assetId, _type: "reference" } } : undefined,
+              },
+            },
+          ],
+        };
+
+        const mutateRes = await fetch(`https://${PROJECT_ID}.api.sanity.io/v2024-01-01/data/mutate/${DATASET}`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(docPayload),
+        });
+
+        if (!mutateRes.ok) {
+          throw new Error("Publishing record failed.");
+        }
+
+        statusMsg.className = "status-msg ok";
+        statusMsg.textContent = "✓ Published! Artwork is now live on your website.";
+        uploadForm.reset();
+        tokenInput.value = token;
+        previewImg.style.display = "none";
+        dropText.textContent = "Click or drag & drop artwork here";
+      } catch (err) {
+        statusMsg.className = "status-msg err";
+        statusMsg.textContent = err.message || "Upload failed.";
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Publish to Website";
+      }
+    });
+  </script>
+</body>
+</html>

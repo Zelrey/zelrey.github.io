@@ -11,17 +11,14 @@
   const SANITY_DATASET = "production";
   const SANITY_API_VERSION = "2024-01-01";
 
-  // Build Sanity query endpoint URL
   function buildSanityQueryUrl(query) {
     const encoded = encodeURIComponent(query);
     return `https://${SANITY_PROJECT_ID}.api.sanity.io/v${SANITY_API_VERSION}/data/query/${SANITY_DATASET}?query=${encoded}`;
   }
 
-  // Convert Sanity asset reference to live CDN URL
   function urlForSanityImage(assetRef) {
     if (!assetRef || !assetRef._ref) return null;
-    const ref = assetRef._ref; // e.g. "image-50ddbba...-1200x800-webp"
-    const parts = ref.split("-");
+    const parts = assetRef._ref.split("-");
     if (parts.length < 4) return null;
     const id = parts[1];
     const dimensions = parts[2];
@@ -29,16 +26,6 @@
     return `https://cdn.sanity.io/images/${SANITY_PROJECT_ID}/${SANITY_DATASET}/${id}-${dimensions}.${format}`;
   }
 
-  function urlForSanityFile(assetRef) {
-    if (!assetRef || !assetRef._ref) return null;
-    const parts = assetRef._ref.split("-");
-    if (parts.length < 3) return null;
-    const id = parts[1];
-    const format = parts[2];
-    return `https://cdn.sanity.io/files/${SANITY_PROJECT_ID}/${SANITY_DATASET}/${id}.${format}`;
-  }
-
-  /* Fetch live artworks from Sanity */
   async function loadSanityArtworks() {
     const artGrid = document.querySelector(".art-masonry");
     if (!artGrid) return;
@@ -55,43 +42,66 @@
 
     try {
       const res = await fetch(buildSanityQueryUrl(query));
-      if (!res.ok) return; // Keep existing static markup if offline or empty
+      if (!res.ok) return;
       const data = await res.json();
       if (!data.result || !data.result.length) return;
 
-      // Populate art grid dynamically from Sanity!
-      artGrid.innerHTML = data.result.map((item) => {
-        if (item.mediaType === "video" && item.videoFile?.asset?.url) {
-          const spanClass = item.spanTwoColumns ? " art-item-span2" : "";
-          return `
-            <figure class="art-item${spanClass}">
-              <video autoplay muted loop playsinline preload="auto">
-                <source src="${item.videoFile.asset.url}" type="video/mp4" />
-              </video>
-            </figure>
+      // Add each published Sanity artwork into the live gallery
+      data.result.forEach((item) => {
+        // Prevent duplicate injection
+        if (document.getElementById(`sanity-${item._id}`)) return;
+
+        const isVideo = item.mediaType === "video" && item.videoFile?.asset?.url;
+        const imgUrl = urlForSanityImage(item.image?.asset);
+        if (!isVideo && !imgUrl) return;
+
+        const figure = document.createElement("figure");
+        figure.id = `sanity-${item._id}`;
+        figure.className = "art-item" + (item.spanTwoColumns ? " art-item-span2" : "");
+        figure.setAttribute("data-lightbox", "");
+        figure.setAttribute("data-title", item.title || "Artwork");
+        figure.setAttribute("data-desc", "Published from Zelrey Art Studio.");
+
+        if (isVideo) {
+          figure.innerHTML = `
+            <video autoplay muted loop playsinline preload="auto">
+              <source src="${item.videoFile.asset.url}" type="video/mp4" />
+            </video>
+          `;
+        } else {
+          figure.innerHTML = `
+            <img src="${imgUrl}" alt="${item.title || "Artwork"}" loading="lazy" decoding="async" />
           `;
         }
 
-        const imgUrl = urlForSanityImage(item.image?.asset);
-        if (!imgUrl) return "";
+        // Attach click listener for lightbox
+        figure.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const video = figure.querySelector("video");
+          const img = figure.querySelector("img");
+          const title = figure.getAttribute("data-title") || "Artwork";
+          const desc = figure.getAttribute("data-desc") || "";
 
-        return `
-          <figure class="art-item" data-lightbox>
-            <img src="${imgUrl}" alt="${item.title || "Artwork"}" loading="lazy" decoding="async" />
-          </figure>
-        `;
-      }).join("");
+          if (video) {
+            const src = video.querySelector("source")?.src || video.src;
+            if (typeof openLightbox === "function") openLightbox(src, true, title, desc);
+          } else if (img) {
+            if (typeof openLightbox === "function") openLightbox(img.src, false, title, desc);
+          }
+        });
 
-      // Trigger masonry layout recalculation
-      if (typeof window.dispatchEvent === "function") {
-        window.dispatchEvent(new Event("resize"));
-      }
+        // Insert at beginning of artworks
+        artGrid.appendChild(figure);
+      });
+
+      // Recalculate masonry layout
+      window.dispatchEvent(new Event("resize"));
+      setTimeout(() => window.dispatchEvent(new Event("resize")), 120);
     } catch (e) {
-      // Graceful fallback to static files
+      // Offline fallback
     }
   }
 
-  // Run on load
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", loadSanityArtworks);
   } else {

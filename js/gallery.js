@@ -54,8 +54,24 @@
       e.stopPropagation();
       const video = el.querySelector("video");
       const img = el.querySelector("img");
-      const title = el.getAttribute("data-title") || (img ? img.alt : "Artwork");
-      const desc = el.getAttribute("data-desc") || "";
+
+      // Find title and description: check element attributes, or look up to parent project group
+      let title = el.getAttribute("data-title");
+      let desc = el.getAttribute("data-desc");
+
+      if (!title || !desc) {
+        const projectGroup = el.closest(".project-group");
+        if (projectGroup) {
+          const groupTitle = projectGroup.querySelector(".project-group-title strong")?.textContent;
+          const groupSub = projectGroup.querySelector(".project-group-title")?.textContent;
+          const groupDesc = projectGroup.querySelector(".project-group-desc")?.textContent;
+          if (!title) title = groupTitle || img?.alt || "Project";
+          if (!desc) desc = groupDesc || groupSub?.replace("+", "").trim() || "";
+        }
+      }
+
+      if (!title) title = (img ? img.alt : "Artwork");
+      if (!desc) desc = "";
 
       if (video) {
         const source = video.querySelector("source");

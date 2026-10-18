@@ -1,5 +1,5 @@
 /* =========================================================
-   Zelrey — Portfolio · Sanity CMS Client & Live Sync
+   Zelrey — Portfolio · Sanity CMS Live Connector
    Project: Portfolio (nczz4q4p)
    Dataset: production
    ========================================================= */
@@ -26,6 +26,7 @@
     return `https://cdn.sanity.io/images/${SANITY_PROJECT_ID}/${SANITY_DATASET}/${id}-${dimensions}.${format}`;
   }
 
+  /* 1. Live Artworks Loader */
   async function loadSanityArtworks() {
     const artGrid = document.querySelector(".art-masonry");
     if (!artGrid) return;
@@ -33,6 +34,7 @@
     const query = `*[_type == "artwork"] | order(order asc) {
       _id,
       title,
+      description,
       order,
       mediaType,
       spanTwoColumns,
@@ -46,66 +48,44 @@
       const data = await res.json();
       if (!data.result || !data.result.length) return;
 
-      // Add each published Sanity artwork into the live gallery
-      data.result.forEach((item) => {
-        // Prevent duplicate injection
-        if (document.getElementById(`sanity-${item._id}`)) return;
-
+      artGrid.innerHTML = data.result.map((item) => {
         const isVideo = item.mediaType === "video" && item.videoFile?.asset?.url;
         const imgUrl = urlForSanityImage(item.image?.asset);
-        if (!isVideo && !imgUrl) return;
+        if (!isVideo && !imgUrl) return "";
 
-        const figure = document.createElement("figure");
-        figure.id = `sanity-${item._id}`;
-        figure.className = "art-item" + (item.spanTwoColumns ? " art-item-span2" : "");
-        figure.setAttribute("data-lightbox", "");
-        figure.setAttribute("data-title", item.title || "Artwork");
-        figure.setAttribute("data-desc", item.description || "Artwork by Zelrey");
+        const spanClass = item.spanTwoColumns ? " art-item-span2" : "";
+        const title = item.title || "Artwork";
+        const desc = item.description || "";
 
         if (isVideo) {
-          figure.innerHTML = `
-            <video autoplay muted loop playsinline preload="auto">
-              <source src="${item.videoFile.asset.url}" type="video/mp4" />
-            </video>
-          `;
-        } else {
-          figure.innerHTML = `
-            <img src="${imgUrl}" alt="${item.title || "Artwork"}" loading="lazy" decoding="async" />
+          return `
+            <figure class="art-item${spanClass}" data-lightbox data-title="${title}" data-desc="${desc}">
+              <video autoplay muted loop playsinline preload="auto">
+                <source src="${item.videoFile.asset.url}" type="video/mp4" />
+              </video>
+            </figure>
           `;
         }
 
-        // Attach click listener for lightbox
-        figure.addEventListener("click", (e) => {
-          e.stopPropagation();
-          const video = figure.querySelector("video");
-          const img = figure.querySelector("img");
-          const title = figure.getAttribute("data-title") || "Artwork";
-          const desc = figure.getAttribute("data-desc") || "";
+        return `
+          <figure class="art-item${spanClass}" data-lightbox data-title="${title}" data-desc="${desc}">
+            <img src="${imgUrl}" alt="${title}" loading="lazy" decoding="async" />
+          </figure>
+        `;
+      }).join("");
 
-          if (video) {
-            const src = video.querySelector("source")?.src || video.src;
-            if (typeof openLightbox === "function") openLightbox(src, true, title, desc);
-          } else if (img) {
-            if (typeof openLightbox === "function") openLightbox(img.src, false, title, desc);
-          }
-        });
+      // Bind lightbox click listeners to newly loaded items
+      bindLightboxEvents(artGrid);
 
-        // Insert at beginning of artworks
-        artGrid.appendChild(figure);
-      });
-
-      // Recalculate masonry layout
+      // Trigger masonry layout calculation
       window.dispatchEvent(new Event("resize"));
       setTimeout(() => window.dispatchEvent(new Event("resize")), 120);
     } catch (e) {
-      // Offline fallback
+      console.warn("Live artworks fetch:", e);
     }
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => { loadSanityArtworks(); loadSanityProjects(); });
-
-  /* Fetch live projects from Sanity */
+  /* 2. Live Projects Loader */
   async function loadSanityProjects() {
     const projectsContainer = document.querySelector("#page-projects .section");
     if (!projectsContainer) return;
@@ -116,7 +96,6 @@
       discipline,
       year,
       description,
-      spanTwoColumns,
       order,
       images[] {
         _type,
@@ -132,14 +111,13 @@
       const data = await res.json();
       if (!data.result || !data.result.length) return;
 
-      data.result.forEach((proj) => {
-        if (document.getElementById(`sanity-proj-${proj._id}`)) return;
+      // Remove any existing dynamic project groups
+      document.querySelectorAll(".sanity-dynamic-project").forEach((el) => el.remove());
 
+      data.result.forEach((proj) => {
         const section = document.createElement("section");
         section.id = `sanity-proj-${proj._id}`;
-        section.className = "project-group view-cols-2";
-
-        const spanClass = proj.spanTwoColumns ? " project-item-span2" : "";
+        section.className = "project-group view-cols-2 sanity-dynamic-project";
 
         const imageCards = (proj.images || []).map((mediaObj, idx) => {
           const isVideo = mediaObj.mediaType === "video" || mediaObj._type === "file" || (mediaObj.asset?.url && mediaObj.asset.url.endsWith(".mp4"));
@@ -148,7 +126,7 @@
 
           if (isVideo) {
             return `
-              <div class="project-item${spanClass}">
+              <div class="project-item">
                 <div class="project-thumb project-thumb--video" data-lightbox data-title="${proj.title}" data-desc="${proj.description || proj.discipline}">
                   <video autoplay muted loop playsinline preload="auto">
                     <source src="${mediaUrl}" type="video/mp4" />
@@ -159,7 +137,7 @@
           }
 
           return `
-            <div class="project-item${spanClass}">
+            <div class="project-item">
               <div class="project-thumb" data-lightbox data-title="${proj.title}" data-desc="${proj.description || proj.discipline}">
                 <img src="${mediaUrl}" alt="${mediaObj.alt || proj.title}" loading="lazy" decoding="async" />
               </div>
@@ -167,16 +145,13 @@
           `;
         }).join("");
 
-        const descHtml = proj.description ? `<p class="project-group-desc">${proj.description}</p>` : "";
-
-        section.innerHTML = `
+                section.innerHTML = `
           <header class="project-group-head">
             <div>
               <h2 class="project-group-title">
                 <strong>${proj.title}</strong>, ${proj.discipline || ""}, ${proj.year || "2026"} <span class="plus-icon">+</span>
               </h2>
-              ${descHtml}
-            </div>
+              </div>
             <div class="view-options" role="group" aria-label="Grid view options">
               <button type="button" class="view-btn active" data-view="2" aria-label="2 Columns View" title="2 Columns">
                 <svg viewBox="0 0 18 18" width="18" height="18" fill="currentColor"><rect x="1.5" y="5.5" width="6.5" height="6.5" rx="1.2"/><rect x="10" y="5.5" width="6.5" height="6.5" rx="1.2"/></svg>
@@ -194,7 +169,7 @@
           </div>
         `;
 
-        // Bind view switcher for this newly injected project
+        // Bind view switcher buttons for this project
         const buttons = section.querySelectorAll(".view-btn[data-view]");
         buttons.forEach((btn) => {
           btn.addEventListener("click", () => {
@@ -205,13 +180,48 @@
           });
         });
 
-        projectsContainer.appendChild(section);
+        // Insert before footer
+        const footer = projectsContainer.querySelector(".site-footer");
+        if (footer) {
+          projectsContainer.insertBefore(section, footer);
+        } else {
+          projectsContainer.appendChild(section);
+        }
+
+        bindLightboxEvents(section);
       });
     } catch (e) {
-      // Offline fallback
+      console.warn("Live projects fetch:", e);
     }
   }
 
+  function bindLightboxEvents(container) {
+    if (!container) return;
+    container.querySelectorAll("[data-lightbox]").forEach((el) => {
+      el.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const video = el.querySelector("video");
+        const img = el.querySelector("img");
+        const title = el.getAttribute("data-title") || (img ? img.alt : "Artwork");
+        const desc = el.getAttribute("data-desc") || "";
+
+        if (video) {
+          const source = video.querySelector("source");
+          const vSrc = (source && source.src) ? source.src : video.src;
+          if (typeof openLightbox === "function") openLightbox(vSrc, true, title, desc);
+        } else if (img) {
+          if (typeof openLightbox === "function") openLightbox(img.currentSrc || img.src, false, title, desc);
+        }
+      });
+    });
+  }
+
+  // Initialize
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      loadSanityArtworks();
+      loadSanityProjects();
+    });
   } else {
     loadSanityArtworks();
     loadSanityProjects();

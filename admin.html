@@ -18,18 +18,18 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 40px 20px 80px;
+      padding: 40px 20px 100px;
     }
     .admin-container {
       width: 100%;
-      max-width: 680px;
+      max-width: 720px;
     }
     .admin-header {
-      margin-bottom: 28px;
+      margin-bottom: 24px;
       text-align: center;
     }
     .admin-header h1 {
-      font-size: 26px;
+      font-size: 28px;
       font-weight: 650;
       letter-spacing: -0.04em;
       margin-bottom: 8px;
@@ -46,7 +46,7 @@
       border-radius: 999px;
       border: 1px solid rgba(255, 255, 255, 0.08);
       margin-bottom: 24px;
-    }
+    }}
     .admin-tab {
       flex: 1;
       padding: 10px 16px;
@@ -64,20 +64,31 @@
       color: #0a0a0a;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     }
+    .panel {
+      display: none;
+    }
+    .panel.active {
+      display: block;
+    }
     .admin-card {
       background: #121318;
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 16px;
       padding: 28px 24px;
-      margin-bottom: 24px;
+      margin-bottom: 28px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-      display: none;
     }
-    .admin-card.active {
-      display: block;
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
     .form-group label {
       display: block;
@@ -103,7 +114,7 @@
     .drop-zone {
       border: 2px dashed rgba(255, 255, 255, 0.2);
       border-radius: 12px;
-      padding: 32px 16px;
+      padding: 28px 16px;
       text-align: center;
       cursor: pointer;
       background: rgba(255, 255, 255, 0.02);
@@ -123,15 +134,9 @@
     .drop-preview {
       margin-top: 14px;
       display: none;
-      max-height: 200px;
+      max-height: 160px;
       border-radius: 8px;
       object-fit: contain;
-    }
-    .files-list {
-      margin-top: 12px;
-      font-size: 12.5px;
-      color: #34d399;
-      line-height: 1.5;
     }
     .submit-btn {
       width: 100%;
@@ -145,7 +150,7 @@
       letter-spacing: -0.02em;
       cursor: pointer;
       transition: transform 0.2s, background 0.2s;
-      margin-top: 8px;
+      margin-top: 6px;
     }
     .submit-btn:hover {
       background: #e8e8ed;
@@ -156,18 +161,108 @@
       cursor: not-allowed;
     }
     .status-msg {
-      margin-top: 16px;
+      margin-top: 14px;
       font-size: 13.5px;
       text-align: center;
       line-height: 1.5;
     }
     .status-msg.ok { color: #34d399; }
     .status-msg.err { color: #f87171; }
-    .badge-count {
-      display: inline-block;
-      font-size: 11.5px;
+
+    /* List items for editing/reordering/deleting */
+    .manage-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .manage-item {
+      background: #181920;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      transition: border-color 0.2s;
+    }
+    .manage-item:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+    .manage-item-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+    .manage-thumb {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      background: #242630;
+      object-fit: cover;
+      flex: none;
+    }
+    .manage-item-text h4 {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .manage-item-text p {
+      font-size: 12.5px;
+      color: #8c8c9a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 320px;
+    }
+    .manage-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: none;
+    }
+    .btn-action {
+      padding: 7px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      color: #ecece8;
+      font-size: 12.5px;
+      font-weight: 550;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-action:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    .btn-danger {
+      color: #f87171;
+      border-color: rgba(248, 113, 113, 0.2);
+      background: rgba(248, 113, 113, 0.04);
+    }
+    .btn-danger:hover {
+      background: rgba(248, 113, 113, 0.15);
+      color: #ff8b8b;
+    }
+    .order-badge {
+      font-family: monospace;
+      font-size: 11px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 3px 6px;
+      border-radius: 4px;
       color: #a0a0ab;
-      margin-top: 4px;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 32px 16px;
+      color: #71717a;
+      font-size: 13.5px;
     }
   </style>
 </head>
@@ -175,95 +270,120 @@
   <div class="admin-container">
     <header class="admin-header">
       <h1>Zelrey Studio Manager</h1>
-      <p>Publish artworks and complete project showcases directly to your live portfolio</p>
+      <p>Upload, rearrange, edit, and delete artworks and project showcases live</p>
     </header>
 
-    <!-- Navigation Tabs -->
     <div class="admin-tabs">
       <button class="admin-tab active" id="tab-art" type="button">🎨 Artworks</button>
       <button class="admin-tab" id="tab-proj" type="button">📁 Projects</button>
     </div>
 
-    <!-- Hidden Token -->
     <input type="hidden" id="token" value="ska1tnKSQZ3v8vYhgF8ni0jFVw8ffA2mprahmSMYSo8jjOzGIVIsSL4pe4tfjpmN1vMQZ9fqtCHp0gk9oG3TiWK4PwyITKVIZ9n1eRgsL0tjHsNnnDzF9z3oyktQLBtb5s5u4Ss6FJPxnKKjMXxL4ck25w4u54GlVvlEfSyrPShqj6JEuD1u" />
 
-    <!-- 1. ARTWORKS FORM -->
-    <form class="admin-card active" id="art-form">
-      <div class="form-group">
-        <label for="art-title">Artwork Title</label>
-        <input class="form-control" type="text" id="art-title" placeholder="e.g. Wings, GAO Uniforms, Sunset Tower" required />
-      </div>
+    <!-- ==================== 1. ARTWORKS PANEL ==================== -->
+    <div class="panel active" id="panel-art">
+      <form class="admin-card" id="art-form">
+        <h2 class="card-title">+ Add New Artwork</h2>
 
-      <div class="form-group">
-        <label for="art-desc">Artwork Description</label>
-        <textarea class="form-control" id="art-desc" rows="3" placeholder="Explain the artwork concept, medium, tools used, or character context..."></textarea>
-      </div>
+        <div class="form-group">
+          <label for="art-title">Artwork Title</label>
+          <input class="form-control" type="text" id="art-title" placeholder="e.g. Wings, GAO Uniforms, Sunset Tower" required />
+        </div>
 
-      <div class="form-group">
-        <label for="art-order">Display Order</label>
-        <input class="form-control" type="number" id="art-order" value="1" />
-      </div>
+        <div class="form-group">
+          <label for="art-desc">Artwork Description (Shown when clicked inside preview)</label>
+          <textarea class="form-control" id="art-desc" rows="3" placeholder="Explain the artwork concept, medium, tools used, or character context..."></textarea>
+        </div>
 
-      <div class="form-group">
-        <label>Layout Option</label>
-        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13.5px; color: #ecece8; margin-top: 4px;">
-          <input type="checkbox" id="art-span2" style="width: 16px; height: 16px; accent-color: #ffffff;" />
-          Occupy 2 columns in Art gallery (Feature Centerpiece)
-        </label>
-      </div>
+        <div class="form-group">
+          <label for="art-order">Display Order (Lower numbers appear first: 1, 2, 3...)</label>
+          <input class="form-control" type="number" id="art-order" value="1" />
+        </div>
 
-      <div class="form-group">
-        <label>Artwork Media (Image or Looping MP4 Video)</label>
-        <div class="drop-zone" id="art-drop-zone">
-          <input type="file" id="art-file-input" accept="image/*,video/mp4" required />
-          <p class="drop-zone-text" id="art-drop-text">Click or drag &amp; drop image or MP4 video here</p>
-          <img class="drop-preview" id="art-preview-img" alt="Preview" />
+        <div class="form-group">
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13.5px; color: #ecece8; margin-top: 4px;">
+            <input type="checkbox" id="art-span2" style="width: 16px; height: 16px; accent-color: #ffffff;" />
+            Occupy 2 columns in Art gallery (Feature Centerpiece)
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>Artwork Media (Image or Looping MP4 Video)</label>
+          <div class="drop-zone" id="art-drop-zone">
+            <input type="file" id="art-file-input" accept="image/*,video/mp4" required />
+            <p class="drop-zone-text" id="art-drop-text">Click or drag &amp; drop image or MP4 video here</p>
+            <img class="drop-preview" id="art-preview-img" alt="Preview" />
+          </div>
+        </div>
+
+        <button class="submit-btn" type="submit" id="art-submit-btn">Publish Artwork</button>
+        <div class="status-msg" id="art-status-msg"></div>
+      </form>
+
+      <div class="admin-card">
+        <div class="card-title">
+          <span>Manage Artworks (Reorder, Edit, Delete)</span>
+          <button class="btn-action" id="art-refresh-btn" type="button">↻ Refresh List</button>
+        </div>
+        <div class="manage-list" id="art-manage-list">
+          <div class="empty-state">Loading published artworks...</div>
         </div>
       </div>
+    </div>
 
-      <button class="submit-btn" type="submit" id="art-submit-btn">Publish Artwork</button>
-      <div class="status-msg" id="art-status-msg"></div>
-    </form>
+    <!-- ==================== 2. PROJECTS PANEL ==================== -->
+    <div class="panel" id="panel-proj">
+      <form class="admin-card" id="proj-form">
+        <h2 class="card-title">+ Add New Project Showcase</h2>
 
-    <!-- 2. PROJECTS FORM (Minimum 4 artworks per project, NO 2-column option) -->
-    <form class="admin-card" id="proj-form">
-      <div class="form-group">
-        <label for="proj-title">Project Title</label>
-        <input class="form-control" type="text" id="proj-title" placeholder="e.g. JPARK SUITES or BIOME CAFÉ" required />
-      </div>
+        <div class="form-group">
+          <label for="proj-title">Project Title</label>
+          <input class="form-control" type="text" id="proj-title" placeholder="e.g. JPARK SUITES or BIOME CAFÉ" required />
+        </div>
 
-      <div class="form-group">
-        <label for="proj-discipline">Discipline / Category</label>
-        <input class="form-control" type="text" id="proj-discipline" placeholder="e.g. 3D Layout &amp; Photography, Branding, Logo &amp; Layouts" required />
-      </div>
+        <div class="form-group">
+          <label for="proj-discipline">Discipline / Category</label>
+          <input class="form-control" type="text" id="proj-discipline" placeholder="e.g. 3D Layout &amp; Photography, Branding, Logo &amp; Layouts" required />
+        </div>
 
-      <div class="form-group">
-        <label for="proj-year">Year</label>
-        <input class="form-control" type="text" id="proj-year" value="2026" required />
-      </div>
+        <div class="form-group">
+          <label for="proj-year">Year</label>
+          <input class="form-control" type="text" id="proj-year" value="2026" required />
+        </div>
 
-      <div class="form-group">
-        <label for="proj-desc">Project Description (Optional)</label>
-        <textarea class="form-control" id="proj-desc" rows="3" placeholder="Describe the design concept, strategy, or visual direction..."></textarea>
-      </div>
+        <div class="form-group">
+          <label for="proj-desc">Project Description (Shown ONLY when clicked inside lightbox)</label>
+          <textarea class="form-control" id="proj-desc" rows="3" placeholder="Describe the design concept, strategy, or visual direction..."></textarea>
+        </div>
 
-      <div class="form-group">
-        <label for="proj-order">Display Order</label>
-        <input class="form-control" type="number" id="proj-order" value="1" />
-      </div>
+        <div class="form-group">
+          <label for="proj-order">Display Order</label>
+          <input class="form-control" type="number" id="proj-order" value="1" />
+        </div>
 
-      <div class="form-group">
-        <label>Project Artworks <span class="badge-count">(Minimum 4 required)</span></label>
-        <div class="drop-zone" id="proj-drop-zone">
-          <input type="file" id="proj-file-input" accept="image/*,video/mp4" multiple required />
-          <p class="drop-zone-text" id="proj-drop-text">Click or drag &amp; drop at least 4 artworks/images here</p>
-          <div class="files-list" id="proj-files-list"></div>
+        <div class="form-group">
+          <label>Project Artworks <span style="font-size: 11.5px; color: #a0a0ab;">(Minimum 4 required)</span></label>
+          <div class="drop-zone" id="proj-drop-zone">
+            <input type="file" id="proj-file-input" accept="image/*,video/mp4" multiple required />
+            <p class="drop-zone-text" id="proj-drop-text">Click or drag &amp; drop at least 4 artworks/images here</p>
+            <div id="proj-files-list" style="margin-top: 12px; font-size: 12.5px; color: #34d399;"></div>
+          </div>
+        </div>
+
+        <button class="submit-btn" type="submit" id="proj-submit-btn">Publish Project Showcase</button>
+        <div class="status-msg" id="proj-status-msg"></div>
+      </form>
+
+      <div class="admin-card">
+        <div class="card-title">
+          <span>Manage Projects (Reorder, Edit, Delete)</span>
+          <button class="btn-action" id="proj-refresh-btn" type="button">↻ Refresh List</button>
+        </div>
+        <div class="manage-list" id="proj-manage-list">
+          <div class="empty-state">Loading published projects...</div>
         </div>
       </div>
-
-      <button class="submit-btn" type="submit" id="proj-submit-btn">Publish Project Showcase</button>
-      <div class="status-msg" id="proj-status-msg"></div>
-    </form>
+    </div>
   </div>
 
   <script>
@@ -274,23 +394,26 @@
     // Tabs
     const tabArt = document.getElementById("tab-art");
     const tabProj = document.getElementById("tab-proj");
-    const artForm = document.getElementById("art-form");
-    const projForm = document.getElementById("proj-form");
+    const panelArt = document.getElementById("panel-art");
+    const panelProj = document.getElementById("panel-proj");
 
     tabArt.addEventListener("click", () => {
       tabArt.classList.add("active");
       tabProj.classList.remove("active");
-      artForm.classList.add("active");
-      projForm.classList.remove("active");
+      panelArt.classList.add("active");
+      panelProj.classList.remove("active");
+      fetchArtworks();
     });
 
     tabProj.addEventListener("click", () => {
       tabProj.classList.add("active");
       tabArt.classList.remove("active");
-      projForm.classList.add("active");
-      artForm.classList.remove("active");
+      panelProj.classList.add("active");
+      panelArt.classList.remove("active");
+      fetchProjects();
     });
 
+    // Helper: Upload asset binary
     async function uploadAsset(file) {
       const isVideo = file.type === "video/mp4";
       const endpoint = isVideo
@@ -311,13 +434,39 @@
       return data.document._id;
     }
 
-    // --- ARTWORK FORM SUBMISSION ---
+    // Helper: Mutate Sanity document (create, patch, delete)
+    async function mutateSanity(mutations) {
+      const res = await fetch(`https://${PROJECT_ID}.api.sanity.io/v2024-01-01/data/mutate/${DATASET}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ mutations }),
+      });
+      if (!res.ok) throw new Error("Database mutation failed.");
+      return await res.json();
+    }
+
+    function getImageUrl(ref) {
+      if (!ref) return "";
+      const p = ref.split("-");
+      if (p.length < 4) return "";
+      return `https://cdn.sanity.io/images/${PROJECT_ID}/${DATASET}/${p[1]}-${p[2]}.${p[3]}?w=100`;
+    }
+
+    // ==========================================
+    // 1. ARTWORKS: Upload, Reorder, Edit, Delete
+    // ==========================================
+    const artForm = document.getElementById("art-form");
     const artDrop = document.getElementById("art-drop-zone");
     const artInput = document.getElementById("art-file-input");
     const artDropText = document.getElementById("art-drop-text");
     const artPreview = document.getElementById("art-preview-img");
     const artSubmit = document.getElementById("art-submit-btn");
     const artStatus = document.getElementById("art-status-msg");
+    const artList = document.getElementById("art-manage-list");
+    const artRefresh = document.getElementById("art-refresh-btn");
 
     artDrop.addEventListener("click", () => artInput.click());
     artInput.addEventListener("change", () => {
@@ -352,37 +501,25 @@
         const isVideo = file.type === "video/mp4";
 
         artStatus.textContent = "Publishing to live site...";
-        const payload = {
-          mutations: [{
-            create: {
-              _type: "artwork",
-              title,
-              description,
-              spanTwoColumns,
-              order,
-              mediaType: isVideo ? "video" : "image",
-              image: !isVideo ? { _type: "image", asset: { _ref: assetId, _type: "reference" } } : undefined,
-              videoFile: isVideo ? { _type: "file", asset: { _ref: assetId, _type: "reference" } } : undefined,
-            }
-          }]
-        };
-
-        const res = await fetch(`https://${PROJECT_ID}.api.sanity.io/v2024-01-01/data/mutate/${DATASET}`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        });
-
-        if (!res.ok) throw new Error("Could not publish record.");
+        await mutateSanity([{
+          create: {
+            _type: "artwork",
+            title,
+            description,
+            spanTwoColumns,
+            order,
+            mediaType: isVideo ? "video" : "image",
+            image: !isVideo ? { _type: "image", asset: { _ref: assetId, _type: "reference" } } : undefined,
+            videoFile: isVideo ? { _type: "file", asset: { _ref: assetId, _type: "reference" } } : undefined,
+          }
+        }]);
 
         artStatus.className = "status-msg ok";
-        artStatus.textContent = "✓ Published! Artwork is now live on your website with title & description.";
+        artStatus.textContent = "✓ Published! Artwork is now live on your website.";
         artForm.reset();
         artPreview.style.display = "none";
         artDropText.textContent = "Click or drag & drop image or MP4 video here";
+        fetchArtworks();
       } catch (err) {
         artStatus.className = "status-msg err";
         artStatus.textContent = err.message || "Upload failed.";
@@ -392,13 +529,92 @@
       }
     });
 
-    // --- PROJECTS FORM SUBMISSION (Min 4 artworks enforced) ---
+    async function fetchArtworks() {
+      artList.innerHTML = `<div class="empty-state">Loading published artworks...</div>`;
+      const query = encodeURIComponent('*[_type == "artwork"] | order(order asc) { _id, title, description, order, mediaType, spanTwoColumns, "imgRef": image.asset._ref }');
+      try {
+        const res = await fetch(`https://${PROJECT_ID}.api.sanity.io/v2024-01-01/data/query/${DATASET}?query=${query}`);
+        const data = await res.json();
+        const items = data.result || [];
+        if (!items.length) {
+          artList.innerHTML = `<div class="empty-state">No artworks in database yet. Add your first piece above!</div>`;
+          return;
+        }
+
+        artList.innerHTML = items.map((item) => {
+          const thumb = item.imgRef ? `<img class="manage-thumb" src="${getImageUrl(item.imgRef)}" alt="" />` : `<div class="manage-thumb" style="display:flex;align-items:center;justify-content:center;font-size:20px;">🎬</div>`;
+          const spanTag = item.spanTwoColumns ? `<span class="order-badge" style="color:#60a5fa;">2 Cols</span>` : "";
+          return `
+            <div class="manage-item" id="item-${item._id}">
+              <div class="manage-item-info">
+                ${thumb}
+                <div class="manage-item-text">
+                  <h4>${item.title || "Untitled"} <span class="order-badge">Order: ${item.order ?? 1}</span> ${spanTag}</h4>
+                  <p>${item.description || "No description"}</p>
+                </div>
+              </div>
+              <div class="manage-actions">
+                <button class="btn-action" type="button" onclick="editArtwork('${item._id}', '${encodeURIComponent(item.title || "")}', '${encodeURIComponent(item.description || "")}', ${item.order ?? 1})">Edit / Reorder</button>
+                <button class="btn-action btn-danger" type="button" onclick="deleteDocument('${item._id}', 'artwork')">Delete</button>
+              </div>
+            </div>
+          `;
+        }).join("");
+      } catch (e) {
+        artList.innerHTML = `<div class="empty-state" style="color:#f87171;">Could not fetch artworks.</div>`;
+      }
+    }
+
+    artRefresh.addEventListener("click", fetchArtworks);
+
+    window.editArtwork = async (id, encTitle, encDesc, curOrder) => {
+      const title = prompt("New Artwork Title:", decodeURIComponent(encTitle));
+      if (title === null) return;
+      const desc = prompt("New Artwork Description (shown in preview when clicked):", decodeURIComponent(encDesc));
+      if (desc === null) return;
+      const order = prompt("New Display Order (1 = top of gallery):", curOrder);
+      if (order === null) return;
+
+      try {
+        await mutateSanity([{
+          patch: {
+            id,
+            set: {
+              title: title.trim(),
+              description: desc.trim(),
+              order: parseInt(order) || 1
+            }
+          }
+        }]);
+        fetchArtworks();
+      } catch (e) {
+        alert("Failed to update artwork.");
+      }
+    };
+
+    window.deleteDocument = async (id, type) => {
+      if (!confirm(`Are you sure you want to permanently delete this ${type} from your website?`)) return;
+      try {
+        await mutateSanity([{ delete: { id } }]);
+        if (type === "artwork") fetchArtworks();
+        else fetchProjects();
+      } catch (e) {
+        alert("Failed to delete document.");
+      }
+    };
+
+    // ==========================================
+    // 2. PROJECTS: Upload, Reorder, Edit, Delete
+    // ==========================================
+    const projForm = document.getElementById("proj-form");
     const projDrop = document.getElementById("proj-drop-zone");
     const projInput = document.getElementById("proj-file-input");
     const projDropText = document.getElementById("proj-drop-text");
     const projFilesList = document.getElementById("proj-files-list");
     const projSubmit = document.getElementById("proj-submit-btn");
     const projStatus = document.getElementById("proj-status-msg");
+    const projList = document.getElementById("proj-manage-list");
+    const projRefresh = document.getElementById("proj-refresh-btn");
 
     projDrop.addEventListener("click", () => projInput.click());
     projInput.addEventListener("change", () => {
@@ -451,36 +667,24 @@
         projSubmit.textContent = "Publishing project...";
         projStatus.textContent = "Creating live project showcase...";
 
-        const payload = {
-          mutations: [{
-            create: {
-              _type: "project",
-              title,
-              discipline,
-              year,
-              description,
-              order,
-              images: mediaAssets,
-            }
-          }]
-        };
-
-        const res = await fetch(`https://${PROJECT_ID}.api.sanity.io/v2024-01-01/data/mutate/${DATASET}`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        });
-
-        if (!res.ok) throw new Error("Could not publish project showcase.");
+        await mutateSanity([{
+          create: {
+            _type: "project",
+            title,
+            discipline,
+            year,
+            description,
+            order,
+            images: mediaAssets,
+          }
+        }]);
 
         projStatus.className = "status-msg ok";
         projStatus.textContent = `✓ Published! Project "${title}" is now live with all ${files.length} artworks.`;
         projForm.reset();
         projFilesList.innerHTML = "";
         projDropText.textContent = "Click or drag & drop at least 4 artworks/images here";
+        fetchProjects();
       } catch (err) {
         projStatus.className = "status-msg err";
         projStatus.textContent = err.message || "Project upload failed.";
@@ -489,6 +693,74 @@
         projSubmit.textContent = "Publish Project Showcase";
       }
     });
+
+    async function fetchProjects() {
+      projList.innerHTML = `<div class="empty-state">Loading published projects...</div>`;
+      const query = encodeURIComponent('*[_type == "project"] | order(order asc) { _id, title, discipline, year, description, order, "firstImg": images[0].asset._ref, "count": count(images) }');
+      try {
+        const res = await fetch(`https://${PROJECT_ID}.api.sanity.io/v2024-01-01/data/query/${DATASET}?query=${query}`);
+        const data = await res.json();
+        const items = data.result || [];
+        if (!items.length) {
+          projList.innerHTML = `<div class="empty-state">No projects in database yet. Add your first project above!</div>`;
+          return;
+        }
+
+        projList.innerHTML = items.map((p) => {
+          const thumb = p.firstImg ? `<img class="manage-thumb" src="${getImageUrl(p.firstImg)}" alt="" />` : `<div class="manage-thumb" style="display:flex;align-items:center;justify-content:center;font-size:20px;">📁</div>`;
+          return `
+            <div class="manage-item" id="proj-${p._id}">
+              <div class="manage-item-info">
+                ${thumb}
+                <div class="manage-item-text">
+                  <h4>${p.title} <span class="order-badge">Order: ${p.order ?? 1}</span> <span class="order-badge">${p.count || 0} artworks</span></h4>
+                  <p>${p.discipline || ""} (${p.year || "2026"})</p>
+                </div>
+              </div>
+              <div class="manage-actions">
+                <button class="btn-action" type="button" onclick="editProject('${p._id}', '${encodeURIComponent(p.title || "")}', '${encodeURIComponent(p.discipline || "")}', '${encodeURIComponent(p.description || "")}', ${p.order ?? 1})">Edit / Reorder</button>
+                <button class="btn-action btn-danger" type="button" onclick="deleteDocument('${p._id}', 'project')">Delete</button>
+              </div>
+            </div>
+          `;
+        }).join("");
+      } catch (e) {
+        projList.innerHTML = `<div class="empty-state" style="color:#f87171;">Could not fetch projects.</div>`;
+      }
+    }
+
+    projRefresh.addEventListener("click", fetchProjects);
+
+    window.editProject = async (id, encTitle, encDisc, encDesc, curOrder) => {
+      const title = prompt("New Project Title:", decodeURIComponent(encTitle));
+      if (title === null) return;
+      const discipline = prompt("New Discipline / Category:", decodeURIComponent(encDisc));
+      if (discipline === null) return;
+      const desc = prompt("New Project Description (shown in preview when clicked):", decodeURIComponent(encDesc));
+      if (desc === null) return;
+      const order = prompt("New Display Order (1 = top of projects):", curOrder);
+      if (order === null) return;
+
+      try {
+        await mutateSanity([{
+          patch: {
+            id,
+            set: {
+              title: title.trim(),
+              discipline: discipline.trim(),
+              description: desc.trim(),
+              order: parseInt(order) || 1
+            }
+          }
+        }]);
+        fetchProjects();
+      } catch (e) {
+        alert("Failed to update project.");
+      }
+    };
+
+    // Initial load
+    fetchArtworks();
   </script>
 </body>
 </html>

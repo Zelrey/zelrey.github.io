@@ -1,0 +1,224 @@
+/* =========================================================
+   Zelrey — Phone Preview only
+   ---------------------------------------------------------
+   These overrides apply ONLY inside PHONE-PREVIEW.html.
+   Nothing in this file is ever loaded by index.html,
+   PREVIEW.html, or the live site.
+
+   Safe place to tweak the phone view without touching desktop.
+   ========================================================= */
+
+.device-screen{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;border-radius:46px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.device-screen::-webkit-scrollbar{display:none;}
+.device-screen .topbar{padding:52px 12px 12px !important;gap:8px !important;}
+.device-screen .btn-contact{padding:9px 13px !important;font-size:11px !important;}
+.device-screen .status{display:none !important;}
+.device-screen .nav-toggle{display:inline-flex !important;}
+/* Mobile nav: keep Projects / Art / Info visible in the top bar,
+   like desktop — no hamburger dropdown. */
+.device-screen .nav-center{
+  position:static !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:0 !important;
+  padding:4px !important;
+  margin-left:auto !important;
+  transform:none !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  z-index:auto !important;
+  order:2 !important;
+}
+.device-screen .nav-center.open{
+  opacity:1 !important;
+  pointer-events:auto !important;
+  transform:none !important;
+}
+.device-screen .nav-link{
+  padding:8px 11px !important;
+  font-size:11px !important;
+  letter-spacing:-0.03em !important;
+}
+/* hamburger no longer needed */
+.device-screen .nav-toggle{display:none !important;}
+.device-screen #page-home.active{min-height:844px !important;}
+.device-screen .hero{min-height:844px !important;padding:150px 18px 26px !important;justify-content:flex-end !important;}
+.device-screen .hero-content{grid-template-columns:1fr !important;gap:24px !important;}
+.device-screen .hero-title{font-size:1.3rem !important;line-height:1.2 !important;margin-bottom:12px !important;}
+.device-screen .hero-bio{font-size:10.5px !important;max-width:100% !important;line-height:1.5 !important;}
+.device-screen .hero-cta{width:100% !important;align-items:center !important;margin-top:16px !important;gap:12px !important;}
+.device-screen .cta-title{font-size:1.15rem !important;text-align:left !important;}
+/* ---- Hire me / Start a project: centred + always above neighbours ---- */
+.device-screen .liquid-metal-host{
+  width:116px !important;
+  height:42px !important;
+  margin:0 auto !important;      /* centre horizontally */
+  align-self:center !important;
+  position:relative !important;
+  z-index:60 !important;         /* stay above cards / overlays */
+  flex:none !important;
+}
+.device-screen .liquid-metal-frame{
+  width:220px !important;
+  height:130px !important;
+  z-index:60 !important;
+}
+
+/* the CTA column must be a centred stack, not left-aligned */
+.device-screen .hero-cta{
+  width:100% !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  margin-top:16px !important;
+  gap:12px !important;
+}
+.device-screen .hero-cta .cta-title{
+  text-align:center !important;
+  width:100% !important;
+}
+
+/* Info page CTA block uses the same centring */
+.device-screen .liquid-metal-host--project{
+  width:172px !important;
+  height:42px !important;
+  margin:16px auto 0 !important;
+  align-self:center !important;
+  z-index:60 !important;
+}
+.device-screen .liquid-metal-host--project .liquid-metal-frame{
+  width:330px !important;
+  height:240px !important;
+}
+
+/* keep the footer / loader from painting over the buttons */
+.device-screen .site-footer{position:relative !important;z-index:1 !important;}
+.device-screen .topbar{z-index:80 !important;}
+/* frame must be >= the shader stage (314x223) or the pill gets sliced */
+.device-screen .liquid-metal-frame{width:330px !important;height:240px !important;}
+.device-screen .home-services{padding:32px 16px 16px !important;}
+.device-screen .home-services-grid{grid-template-columns:1fr !important;gap:10px !important;}
+.device-screen .service-card{padding:20px 18px !important;}
+.device-screen .service-card h3{font-size:15px !important;margin-bottom:7px !important;}
+.device-screen .service-card p{font-size:11.5px !important;line-height:1.5 !important;}
+.device-screen .client-marquee-section{padding:18px 0 44px !important;}
+.device-screen .client-marquee-label{font-size:9px !important;margin-bottom:16px !important;}
+.device-screen .marquee-container,.device-screen .marquee-track{gap:40px !important;}
+.device-screen .marquee-track{animation-duration:22s !important;}
+.device-screen .client-logo-item{height:34px !important;}
+.device-screen .client-logo-img{height:24px !important;max-width:104px !important;}
+.device-screen .client-logo-img--jpark{height:21px !important;max-width:96px !important;}
+.device-screen .client-logo-img--clasen{height:15px !important;max-width:80px !important;}
+.device-screen .client-logo-img--gao{height:30px !important;max-width:30px !important;}
+.device-screen .client-logo-img--emot{height:30px !important;max-width:44px !important;}
+.device-screen .section{padding:128px 16px 56px !important;}
+.device-screen .art-masonry{grid-template-columns:repeat(2,1fr) !important;gap:6px !important;}
+.device-screen .art-intro{grid-template-columns:1fr !important;gap:14px !important;}
+.device-screen .project-group-grid,.device-screen .project-group.view-cols-2 .project-group-grid,.device-screen .project-group.view-cols-3 .project-group-grid,.device-screen .project-group.view-cols-4 .project-group-grid{grid-template-columns:1fr !important;gap:6px !important;}
+.device-screen .site-footer{flex-direction:column !important;align-items:flex-start !important;gap:12px !important;padding:22px 16px 34px !important;}
+.device-screen .footer-left{flex-direction:column !important;align-items:flex-start !important;gap:8px !important;}
+.device-screen .lightbox-img,.device-screen .lightbox-video{max-height:58vh !important;}
+
+
+/* =========================================================
+   FINAL PHONE CTA OVERRIDE  (kept last on purpose)
+   Centred, and stacked above anything that could cover it.
+   ========================================================= */
+.device-screen .hero-cta{
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  width:100% !important;
+}
+.device-screen .hero-cta .cta-title{ text-align:center !important; width:100% !important; }
+
+.device-screen .liquid-metal-host,
+.device-screen .liquid-metal-host--project{
+  margin-left:auto !important;
+  margin-right:auto !important;
+  align-self:center !important;
+  position:relative !important;
+  z-index:60 !important;
+}
+
+.device-screen .liquid-metal-frame{ z-index:60 !important; }
+.device-screen .topbar{ z-index:80 !important; }
+.device-screen .site-footer{ position:relative !important; z-index:1 !important; }
+
+
+/* =========================================================
+   HERO SPACING — give the CTA room to breathe
+   Reduce the top pad so the whole block (title, bio, Zelrey,
+   Hire me) fits inside the 844px screen without the button
+   being pushed past the fold.
+   ========================================================= */
+.device-screen .hero{
+  padding-top:110px !important;
+  padding-bottom:56px !important;   /* clearance above the home bar */
+  justify-content:flex-end !important;
+}
+.device-screen .hero-title{ margin-bottom:10px !important; }
+.device-screen .hero-bio{ margin-bottom:0 !important; }
+
+/* lift the CTA stack up a touch and keep the button clear of the edge */
+.device-screen .hero-cta{
+  margin-top:18px !important;
+  margin-bottom:30px !important;
+  gap:10px !important;
+}
+.device-screen .liquid-metal-host{
+  margin-bottom:14px !important;   /* clears the glow above the screen edge */
+}
+
+
+/* =========================================================
+   BUTTON CLIPPING FIX
+   The liquid-metal iframe holds a 314x223 shader stage.
+   The frame is 330x240 centred on a 116x42 host, so it reaches
+   ~99px above and below the button. Give the hero that much
+   clearance and make sure nothing above clips it.
+   ========================================================= */
+.device-screen .liquid-metal-frame{
+  width:330px !important;
+  height:240px !important;
+  overflow:visible !important;
+}
+.device-screen .liquid-metal-host,
+.device-screen .liquid-metal-host--project{
+  overflow:visible !important;
+}
+.device-screen .hero{
+  padding-top:104px !important;
+  padding-bottom:116px !important;   /* was 56px — room for the glow */
+}
+.device-screen .hero-content,
+.device-screen .hero-copy,
+.device-screen .page,
+.device-screen #page-home{
+  overflow:visible !important;
+}
+
+
+/* Phone hero title — a touch larger */
+.device-screen .hero-title{
+  font-size:1.3rem !important;
+  line-height:1.2 !important;
+  letter-spacing:-0.045em !important;
+  margin-bottom:12px !important;
+}
+
+
+/* =========================================================
+   ART GRID — always two columns on phone
+   The flattened 1024px block sets 3 columns; this wins.
+   ========================================================= */
+.device-screen .art-masonry{
+  display:grid !important;
+  grid-template-columns:repeat(2, minmax(0,1fr)) !important;
+  column-gap:6px !important;
+  row-gap:0 !important;
+}
+/* a feature tile fills the full 2-column width */
+.device-screen .art-item-span2{
+  grid-column:span 2 !important;
+}

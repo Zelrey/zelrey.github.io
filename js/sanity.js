@@ -35,6 +35,8 @@
       _id,
       title,
       description,
+      credits,
+      tools,
       order,
       mediaType,
       spanTwoColumns,
@@ -56,10 +58,12 @@
         const spanClass = item.spanTwoColumns ? " art-item-span2" : "";
         const title = item.title || "Artwork";
         const desc = item.description || "";
+        const credits = item.credits || "";
+        const tools = item.tools || "";
 
         if (isVideo) {
           return `
-            <figure class="art-item${spanClass}" data-lightbox data-title="${title}" data-desc="${desc}">
+            <figure class="art-item${spanClass}" data-lightbox data-title="${title}" data-desc="${desc}" data-credits="${credits}" data-tools="${tools}">
               <video autoplay muted loop playsinline preload="auto">
                 <source src="${item.videoFile.asset.url}" type="video/mp4" />
               </video>
@@ -68,7 +72,7 @@
         }
 
         return `
-          <figure class="art-item${spanClass}" data-lightbox data-title="${title}" data-desc="${desc}">
+          <figure class="art-item${spanClass}" data-lightbox data-title="${title}" data-desc="${desc}" data-credits="${credits}" data-tools="${tools}">
             <img src="${imgUrl}" alt="${title}" loading="lazy" decoding="async" />
           </figure>
         `;
@@ -96,6 +100,9 @@
       discipline,
       year,
       description,
+      credits,
+      tools,
+      awards,
       order,
       images[] {
         _type,
@@ -127,7 +134,7 @@
           if (isVideo) {
             return `
               <div class="project-item">
-                <div class="project-thumb project-thumb--video" data-lightbox data-title="${proj.title}" data-desc="${proj.description || proj.discipline}">
+                <div class="project-thumb project-thumb--video" data-lightbox data-title="${proj.title}" data-desc="${proj.description || proj.discipline}" data-credits="${proj.credits || ""}" data-tools="${proj.tools || ""}" data-award="${proj.awards || ""}">
                   <video autoplay muted loop playsinline preload="auto">
                     <source src="${mediaUrl}" type="video/mp4" />
                   </video>
@@ -138,7 +145,7 @@
 
           return `
             <div class="project-item">
-              <div class="project-thumb" data-lightbox data-title="${proj.title}" data-desc="${proj.description || proj.discipline}">
+              <div class="project-thumb" data-lightbox data-title="${proj.title}" data-desc="${proj.description || proj.discipline}" data-credits="${proj.credits || ""}" data-tools="${proj.tools || ""}" data-award="${proj.awards || ""}">
                 <img src="${mediaUrl}" alt="${mediaObj.alt || proj.title}" loading="lazy" decoding="async" />
               </div>
             </div>

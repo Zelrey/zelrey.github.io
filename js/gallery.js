@@ -13,7 +13,14 @@
   const lightboxDesc = document.getElementById("lightbox-desc");
   const lightboxClose = document.getElementById("lightbox-close");
 
-  function openLightbox(mediaSrc, isVideo, title, desc) {
+  const lightboxAward = document.getElementById("lightbox-award");
+  const lightboxCredits = document.getElementById("lightbox-credits");
+  const lightboxTools = document.getElementById("lightbox-tools");
+  const boxCredits = document.getElementById("box-credits");
+  const boxTools = document.getElementById("box-tools");
+  const metaGrid = document.getElementById("lightbox-meta-grid");
+
+  function openLightbox(mediaSrc, isVideo, title, desc, credits, tools, award) {
     if (!lightbox) return;
 
     if (isVideo && lightboxVideo) {
@@ -35,6 +42,43 @@
 
     if (lightboxTitle) lightboxTitle.textContent = title || "";
     if (lightboxDesc) lightboxDesc.textContent = desc || "";
+
+    // Awards badge (shown only when provided, e.g. for projects)
+    if (lightboxAward) {
+      if (award) {
+        lightboxAward.textContent = `★ ${award}`;
+        lightboxAward.style.display = "inline-block";
+      } else {
+        lightboxAward.style.display = "none";
+      }
+    }
+
+    // Credits / Co-owners
+    let hasMeta = false;
+    if (lightboxCredits && boxCredits) {
+      if (credits) {
+        lightboxCredits.textContent = credits;
+        boxCredits.style.display = "flex";
+        hasMeta = true;
+      } else {
+        boxCredits.style.display = "none";
+      }
+    }
+
+    // Tools
+    if (lightboxTools && boxTools) {
+      if (tools) {
+        lightboxTools.textContent = tools;
+        boxTools.style.display = "flex";
+        hasMeta = true;
+      } else {
+        boxTools.style.display = "none";
+      }
+    }
+
+    if (metaGrid) {
+      metaGrid.style.display = hasMeta ? "flex" : "none";
+    }
 
     lightbox.classList.add("open");
     document.body.style.overflow = "hidden";
@@ -73,12 +117,16 @@
       if (!title) title = (img ? img.alt : "Artwork");
       if (!desc) desc = "";
 
+      const credits = el.getAttribute("data-credits") || "";
+      const tools = el.getAttribute("data-tools") || "";
+      const award = el.getAttribute("data-award") || "";
+
       if (video) {
         const source = video.querySelector("source");
         const vSrc = (source && source.src) ? source.src : video.src;
-        openLightbox(vSrc, true, title, desc);
+        openLightbox(vSrc, true, title, desc, credits, tools, award);
       } else if (img) {
-        openLightbox(img.currentSrc || img.src, false, title, desc);
+        openLightbox(img.currentSrc || img.src, false, title, desc, credits, tools, award);
       }
     });
   });
@@ -135,21 +183,33 @@
   }
 
   /* ----- Art Masonry tight auto-rows (guaranteed 0 gap on top) ----- */
+  /* Reads the REAL column count and gap from the rendered grid, so the same
+     code works at 4 columns on desktop and 2 columns on phone. */
+  function readGridMetrics(grid) {
+    const cs = getComputedStyle(grid);
+    const tracks = (cs.gridTemplateColumns || "").trim().split(/\s+/).filter(Boolean);
+    const cols = tracks.length || 1;
+    const gap = parseFloat(cs.columnGap) || 0;
+    const colWidth = (grid.clientWidth - gap * (cols - 1)) / cols;
+    return { cols, gap, colWidth };
+  }
+
   function resizeArtItems() {
     const grid = document.querySelector(".art-masonry");
     if (!grid) return;
-    const colWidth = (grid.clientWidth - 21) / 4;
-    if (colWidth <= 10) return;
+
+    const { cols, gap, colWidth } = readGridMetrics(grid);
+    if (!colWidth || colWidth <= 10) return;
 
     const rowHeight = 2;
-    const gap = 7;
     const items = grid.querySelectorAll(".art-item");
 
     items.forEach((item) => {
       let h = 0;
       if (item.classList.contains("art-item-span2")) {
-        // Video spans 2 columns + 1 gap
-        const span2Width = colWidth * 2 + gap;
+        // spans 2 columns when the grid has them, otherwise a single column
+        const spanCols = Math.min(2, cols);
+        const span2Width = colWidth * spanCols + gap * (spanCols - 1);
         h = span2Width; // 1:1 square
       } else {
         const img = item.querySelector("img");

@@ -296,6 +296,16 @@
         </div>
 
         <div class="form-group">
+          <label for="art-credits">Co-Owners / Credits (Optional)</label>
+          <input class="form-control" type="text" id="art-credits" placeholder="e.g. In collaboration with Studio X / Character design by Zelrey" />
+        </div>
+
+        <div class="form-group">
+          <label for="art-tools">Tools Used</label>
+          <input class="form-control" type="text" id="art-tools" placeholder="e.g. Clip Studio Paint, Photoshop, Blender" />
+        </div>
+
+        <div class="form-group">
           <label for="art-order">Display Order (Lower numbers appear first: 1, 2, 3...)</label>
           <input class="form-control" type="number" id="art-order" value="1" />
         </div>
@@ -354,6 +364,21 @@
         <div class="form-group">
           <label for="proj-desc">Project Description (Shown ONLY when clicked inside lightbox)</label>
           <textarea class="form-control" id="proj-desc" rows="3" placeholder="Describe the design concept, strategy, or visual direction..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="proj-credits">Co-Owners / Credits (Optional)</label>
+          <input class="form-control" type="text" id="proj-credits" placeholder="e.g. Zelrey (Lead Designer), Client Studio" />
+        </div>
+
+        <div class="form-group">
+          <label for="proj-tools">Tools Used</label>
+          <input class="form-control" type="text" id="proj-tools" placeholder="e.g. Blender, Illustrator, Photoshop, Figma" />
+        </div>
+
+        <div class="form-group">
+          <label for="proj-awards">Awards (Only for projects - Optional)</label>
+          <input class="form-control" type="text" id="proj-awards" placeholder="e.g. Best 3D Visualization 2026 / Featured on Behance" />
         </div>
 
         <div class="form-group">
@@ -486,6 +511,8 @@
       e.preventDefault();
       const title = document.getElementById("art-title").value.trim();
       const description = document.getElementById("art-desc").value.trim();
+      const credits = document.getElementById("art-credits").value.trim();
+      const tools = document.getElementById("art-tools").value.trim();
       const spanTwoColumns = document.getElementById("art-span2").checked;
       const order = parseInt(document.getElementById("art-order").value) || 1;
       const file = artInput.files[0];
@@ -582,6 +609,8 @@
             set: {
               title: title.trim(),
               description: desc.trim(),
+              credits: credits.trim(),
+              tools: tools.trim(),
               order: parseInt(order) || 1
             }
           }
@@ -641,6 +670,9 @@
       const discipline = document.getElementById("proj-discipline").value.trim();
       const year = document.getElementById("proj-year").value.trim();
       const description = document.getElementById("proj-desc").value.trim();
+      const credits = document.getElementById("proj-credits").value.trim();
+      const tools = document.getElementById("proj-tools").value.trim();
+      const awards = document.getElementById("proj-awards").value.trim();
       const order = parseInt(document.getElementById("proj-order").value) || 1;
 
       projSubmit.disabled = true;
@@ -738,6 +770,12 @@
       if (discipline === null) return;
       const desc = prompt("New Project Description (shown in preview when clicked):", decodeURIComponent(encDesc));
       if (desc === null) return;
+      const credits = prompt("Credits / Co-Owners:", "");
+      if (credits === null) return;
+      const tools = prompt("Tools Used (e.g. Blender, Photoshop):", "");
+      if (tools === null) return;
+      const awards = prompt("Awards (Only for projects):", "");
+      if (awards === null) return;
       const order = prompt("New Display Order (1 = top of projects):", curOrder);
       if (order === null) return;
 
@@ -749,6 +787,9 @@
               title: title.trim(),
               discipline: discipline.trim(),
               description: desc.trim(),
+              credits: credits.trim(),
+              tools: tools.trim(),
+              awards: awards.trim(),
               order: parseInt(order) || 1
             }
           }

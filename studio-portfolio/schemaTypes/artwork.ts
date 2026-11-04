@@ -13,6 +13,22 @@ export const artworkType = defineType({
       description: 'Name of the artwork (e.g. Surreal Logos, Wings, Girl with Oranges)',
     }),
     defineField({
+      name: 'description',
+      title: 'Artwork Description',
+      type: 'text',
+      rows: 3,
+    }),
+    defineField({
+      name: 'credits',
+      title: 'Co-Owners / Credits',
+      type: 'string',
+    }),
+    defineField({
+      name: 'tools',
+      title: 'Tools Used',
+      type: 'string',
+    }),
+    defineField({
       name: 'order',
       title: 'Display Order / Priority',
       type: 'number',

@@ -38,6 +38,21 @@ export const projectType = defineType({
       initialValue: '2026',
     }),
     defineField({
+      name: 'credits',
+      title: 'Co-Owners / Credits',
+      type: 'string',
+    }),
+    defineField({
+      name: 'tools',
+      title: 'Tools Used',
+      type: 'string',
+    }),
+    defineField({
+      name: 'awards',
+      title: 'Awards',
+      type: 'string',
+    }),
+    defineField({
       name: 'order',
       title: 'Display Order',
       type: 'number',

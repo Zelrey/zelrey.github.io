@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="css/art.css" />
     <link rel="stylesheet" href="css/info.css" />
     <link rel="stylesheet" href="css/modal.css" />
+    <meta name="p:domain_verify" content="8e2391e52109a0273cb956b4a032d293" />
     <link rel="icon" href="images/avatar.webp" type="image/webp" />
   </head>
   <body>
@@ -670,6 +671,7 @@ if(gl){
         </div>
       </section>
 
+      
       <!-- Services / Capabilities (2 columns, no numbers, no section title) -->
       <section class="home-services" aria-label="Capabilities">
         <div class="home-services-grid">
@@ -700,6 +702,65 @@ if(gl){
               Using Adobe Animate to bring illustrations, graphics, and visual concepts to life through motion, creating engaging animated sequences and visual storytelling.
             </p>
           </article>
+        </div>
+      </section>
+
+      <!-- Running Client Logos Marquee -->
+      <section class="client-marquee-section" aria-label="Clients and Collaborations">
+        <p class="client-marquee-label">Selected Clients &amp; Collaborations</p>
+        <div class="marquee-container">
+          <div class="marquee-track">
+          <div class="client-logo-item">
+            <img src="images/logo-jpark.webp" alt="Jpark Island Resort &amp; Waterpark" class="client-logo-img client-logo-img--jpark" />
+          </div>
+          <div class="client-logo-item">
+            <img src="images/logo-clasen.webp" alt="Clasen Business Solutions" class="client-logo-img client-logo-img--clasen" />
+          </div>
+          <div class="client-logo-item">
+            <img src="images/logo-gao.webp" alt="Graphic Artist Organization — CTU" class="client-logo-img client-logo-img--gao" />
+          </div>
+          <div class="client-logo-item">
+            <img src="images/logo-emottoons.webp" alt="Emot Toons Animation Studio" class="client-logo-img client-logo-img--emot" />
+          </div>
+          <div class="client-logo-item">
+            <img src="images/logo-jpark.webp" alt="Jpark Island Resort &amp; Waterpark" class="client-logo-img client-logo-img--jpark" />
+          </div>
+          <div class="client-logo-item">
+            <img src="images/logo-clasen.webp" alt="Clasen Business Solutions" class="client-logo-img client-logo-img--clasen" />
+          </div>
+          <div class="client-logo-item">
+            <img src="images/logo-gao.webp" alt="Graphic Artist Organization — CTU" class="client-logo-img client-logo-img--gao" />
+          </div>
+          <div class="client-logo-item">
+            <img src="images/logo-emottoons.webp" alt="Emot Toons Animation Studio" class="client-logo-img client-logo-img--emot" />
+          </div>
+          </div>
+          <div class="marquee-track" aria-hidden="true">
+          <div class="client-logo-item">
+            <img src="images/logo-jpark.webp" alt="Jpark Island Resort &amp; Waterpark" class="client-logo-img client-logo-img--jpark" />
+          </div>
+          <div class="client-logo-item">
+            <img src="images/logo-clasen.webp" alt="Clasen Business Solutions" class="client-logo-img client-logo-img--clasen" />
+          </div>
+          <div class="client-logo-item">
+            <img src="images/logo-gao.webp" alt="Graphic Artist Organization — CTU" class="client-logo-img client-logo-img--gao" />
+          </div>
+          <div class="client-logo-item">
+            <img src="images/logo-emottoons.webp" alt="Emot Toons Animation Studio" class="client-logo-img client-logo-img--emot" />
+          </div>
+          <div class="client-logo-item">
+            <img src="images/logo-jpark.webp" alt="Jpark Island Resort &amp; Waterpark" class="client-logo-img client-logo-img--jpark" />
+          </div>
+          <div class="client-logo-item">
+            <img src="images/logo-clasen.webp" alt="Clasen Business Solutions" class="client-logo-img client-logo-img--clasen" />
+          </div>
+          <div class="client-logo-item">
+            <img src="images/logo-gao.webp" alt="Graphic Artist Organization — CTU" class="client-logo-img client-logo-img--gao" />
+          </div>
+          <div class="client-logo-item">
+            <img src="images/logo-emottoons.webp" alt="Emot Toons Animation Studio" class="client-logo-img client-logo-img--emot" />
+          </div>
+          </div>
         </div>
       </section>
 
@@ -2102,8 +2163,21 @@ if(gl){
           <source src="" type="video/mp4" />
         </video>
         <div class="lightbox-caption" id="lightbox-caption">
-          <h3 class="lightbox-title" id="lightbox-title"></h3>
+          <div class="lightbox-header-row">
+            <h3 class="lightbox-title" id="lightbox-title"></h3>
+            <span class="lightbox-award" id="lightbox-award"></span>
+          </div>
           <p class="lightbox-desc" id="lightbox-desc"></p>
+          <div class="lightbox-meta-grid" id="lightbox-meta-grid">
+            <div class="lightbox-meta-item" id="box-credits">
+              <span class="lightbox-meta-label">Credits / Co-owners</span>
+              <span class="lightbox-meta-value" id="lightbox-credits"></span>
+            </div>
+            <div class="lightbox-meta-item" id="box-tools">
+              <span class="lightbox-meta-label">Tools</span>
+              <span class="lightbox-meta-value" id="lightbox-tools"></span>
+            </div>
+          </div>
         </div>
       </div>
       <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Close preview">

@@ -169,7 +169,7 @@
   }
 
   .hero-title {
-    font-size: clamp(1.35rem, 6vw, 1.75rem);
+    font-size: clamp(0.85rem, 3.2vw, 1.05rem);
   }
 
   .cta-title {
@@ -193,9 +193,9 @@
 .home-services {
   position: relative;
   z-index: 2;
-  padding: 80px 40px 60px;
+  padding: 80px 40px 32px;
   background: var(--bg);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: none;
 }
 
 .home-services-grid {
@@ -242,4 +242,112 @@
     grid-template-columns: 1fr;
     gap: 16px;
   }
+}
+
+/* ----- Running Client Logo Marquee ----- */
+.client-marquee-section {
+  position: relative;
+  z-index: 2;
+  padding: 36px 0 88px;
+  background: var(--bg);
+  border-top: none;
+  overflow: hidden;
+}
+
+.client-marquee-label {
+  text-align: center;
+  font-family: monospace, sans-serif;
+  font-size: 11px;
+  font-weight: 550;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.38);
+  margin-bottom: 36px;
+}
+
+.marquee-container {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  gap: 96px;
+  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+
+.marquee-track {
+  display: flex;
+  align-items: center;
+  gap: 96px;
+  flex-shrink: 0;
+  animation: scrollMarquee 32s linear infinite;
+  will-change: transform;
+  padding: 12px 0;
+}
+
+.marquee-container:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes scrollMarquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - 96px));
+  }
+}
+
+.client-logo-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 54px;
+  opacity: 0.6;
+  filter: grayscale(1) brightness(1.2);
+  transition: opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease;
+  cursor: default;
+  flex: none;
+}
+
+.client-logo-img {
+  height: 38px;
+  width: auto;
+  max-width: 190px;
+  object-fit: contain;
+  display: block;
+}
+
+.client-logo-img--jpark {
+  height: 36px;
+  max-width: 170px;
+  filter: brightness(2.2) contrast(1.1);
+}
+
+.client-logo-img--gao {
+  height: 48px;
+  max-width: 48px;
+  border-radius: 50%;
+}
+
+.client-logo-img--emot {
+  height: 46px;
+  max-width: 70px;
+}
+
+.client-logo-img--clasen {
+  height: 25px;
+  max-width: 135px;
+}
+
+.client-logo-item svg {
+  height: 24px;
+  width: auto;
+  max-width: 32px;
+  fill: currentColor;
+}
+
+.client-logo-item:hover {
+  opacity: 0.95;
+  filter: grayscale(0);
+  transform: translateY(-1px);
 }

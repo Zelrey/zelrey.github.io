@@ -222,3 +222,11 @@
 .device-screen .art-item-span2{
   grid-column:span 2 !important;
 }
+
+
+/* =========================================================
+   FEATURED ART — keep 3 across on phone, tighter padding
+   ========================================================= */
+.device-screen .featured-art{ padding:44px 16px 6px !important; }
+.device-screen .featured-art-label{ font-size:15px !important; font-weight:600 !important; letter-spacing:-0.02em !important; margin-bottom:16px !important; text-align:center !important; }
+.device-screen .featured-art-grid{ gap:4px !important; }
